@@ -1,0 +1,99 @@
+<!-- modal.html.erb -->
+
+
+<!-- Start Button -->
+<a id="startButton" role="button" tabindex="0" aria-label="Start survey">Start &gt;</a>
+
+<!-- Modal -->
+<div id="myModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+  <div>
+    <button class="close" aria-label="Close modal">×</button>
+    <h2 id="modalTitle">Please answer a few questions</h2>
+
+    <%= form_with url: survey_save_path, method: :post, local: true, id: "statusForm" do %>
+      <fieldset style="margin-bottom: 1.5rem;">
+        <legend><strong>Gender</strong></legend>
+        <label><input type="radio" name="gender" required value="male" /> Male</label><br/>
+        <label><input type="radio" name="gender" required value="female" /> Female</label><br/>
+        <label><input type="radio" name="gender" required value="other" /> Other</label>
+      </fieldset>
+
+      <fieldset style="margin-bottom: 1rem;">
+        <legend><strong>Disease Status</strong></legend>
+        <label><input type="radio" name="status" required value="quiet" /> Quiet, in remission</label><br/>
+        <label><input type="radio" name="status" required value="active_kidneys" /> Active, including in my kidneys</label><br/>
+        <label><input type="radio" name="status" required value="active_no_kidneys" /> Active, but not in my kidneys</label>
+      </fieldset>
+
+      <div id="kidneyOptions" style="margin-top: 1rem; display: none; padding-left: 1rem; border-left: 2px solid #ddd;">
+        <p><strong>Kidney Treatment Options:</strong></p>
+        <label><input type="radio" name="kidney_treatment" required value="a" /> Starting RC</label><br/>
+        <label><input type="radio" name="kidney_treatment" required value="b" /> Maintain or discuss Cyto</label><br/>
+        <label><input type="radio" name="kidney_treatment" required value="c" /> Maintain or discuss Cyclo</label><br/>
+        <label><input type="radio" name="kidney_treatment" required value="d" /> Maintain or discuss Azathio</label>
+      </div>
+      <div style="margin-top: 1.5rem;">
+    <button type="submit" class="btn btn-primary">Next</button>
+  </div>
+<% end %> <!-- End of form_with -->
+
+  </div>
+</div>
+
+<script>
+  function openStartModal() {
+    const btn = document.getElementById('startButton');
+    if (btn) btn.classList.add('hidden');
+
+    const modal = document.getElementById('myModal');
+    if (modal) modal.classList.add('show');
+  }
+
+  function closeStartModal() {
+    const modal = document.getElementById('myModal');
+    if (modal) modal.classList.remove('show');
+
+    const btn = document.getElementById('startButton');
+    if (btn) btn.classList.remove('hidden');
+  }
+
+  function toggleKidneyOptions() {
+    const status = document.querySelector('input[name="status"]:checked')?.value;
+    const kidneyDiv = document.getElementById('kidneyOptions');
+    if (!kidneyDiv) return;
+
+    const kidneyInputs = kidneyDiv.querySelectorAll('input[type="radio"]');
+
+    if (status === 'active_kidneys') {
+      kidneyDiv.style.display = 'block';
+      kidneyInputs.forEach(input => input.setAttribute('required', true));
+    } else {
+      kidneyDiv.style.display = 'none';
+      kidneyInputs.forEach(input => {
+        input.checked = false;
+        input.removeAttribute('required');
+      });
+    }
+  }
+
+  document.addEventListener("turbo:load", () => {
+    const startButton = document.getElementById("startButton");
+    if (startButton) {
+      startButton.addEventListener("click", openStartModal);
+    }
+
+    const closeBtn = document.querySelector("#myModal .close");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", closeStartModal);
+    }
+
+    const statusRadios = document.querySelectorAll('input[name="status"]');
+    statusRadios.forEach(radio => {
+      radio.addEventListener("change", toggleKidneyOptions);
+    });
+
+    // Initial state check on load
+    toggleKidneyOptions();
+  });
+</script>
+

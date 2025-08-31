@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+# Remove stale Rails server PID if it exists
+PIDFILE="tmp/pids/server.pid"
+if [ -f "$PIDFILE" ]; then
+  echo "Removing stale PID file at $PIDFILE"
+  rm -f "$PIDFILE"
+fi
+
+# Install foreman if missing
+if ! gem list foreman -i --silent; then
+  echo "Installing foreman..."
+  gem install foreman
+fi
+
+# Default to port 3000 if not specified
+export PORT="${PORT:-3000}"
+
+# Let the debug gem allow remote connections, but avoid loading until `debugger` is called
+export RUBY_DEBUG_OPEN="true"
+export RUBY_DEBUG_LAZY="true"
+
+exec foreman start -f Procfile.dev "$@"
