@@ -1787,9 +1787,7 @@ class SurveyCard
             I18n.t("data_627")
           ],
           categories: [],
-          hidden: false,
-          learn_more: I18n.t("data_641"),
-          learn_more_id: 119
+          hidden: false
         ),
         new(
           id: 117,
@@ -1814,17 +1812,6 @@ class SurveyCard
             I18n.t("data_638"),
             I18n.t("data_639"),
             I18n.t("data_640")
-          ],
-          categories: [],
-          hidden: false
-        ),
-        new(
-          id: 119,
-          title: I18n.t("data_642"),
-          image_url: "" ,
-          description: [
-            I18n.t("data_643"),
-            I18n.t("data_644")
           ],
           categories: [],
           hidden: false

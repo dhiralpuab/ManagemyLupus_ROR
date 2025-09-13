@@ -1518,9 +1518,7 @@ class SurveyCard
           I18n.t("data_360"),
           I18n.t("data_361")
         ],
-        categories: [:active_kidneys],
-        learn_more: I18n.t("data_628"),
-        learn_more_id: 117
+        categories: [:active_kidneys]
       ),
 
       new(
@@ -1543,9 +1541,7 @@ class SurveyCard
           I18n.t("data_367"),
           I18n.t("data_368")
         ],
-        categories: [:active_kidneys],
-        learn_more: I18n.t("data_634"),
-        learn_more_id: 118
+        categories: [:active_kidneys]
       ),
 
       new(
@@ -1787,44 +1783,17 @@ class SurveyCard
             I18n.t("data_627")
           ],
           categories: [],
-          hidden: false,
-          learn_more: I18n.t("data_641"),
-          learn_more_id: 119
-        ),
-        new(
-          id: 117,
-          title: I18n.t("data_629"),
-          image_url: "" ,
-          description: [
-            I18n.t("data_630"),
-            I18n.t("data_631"),
-            I18n.t("data_632"),
-            I18n.t("data_633")
-          ],
-          categories: [],
           hidden: false
         ),
         new(
-          id: 118,
-          title: I18n.t("data_635"),
+          id: 116,
+          title: I18n.t("data_623"),
           image_url: "" ,
           description: [
-            I18n.t("data_636"),
-            I18n.t("data_637"),
-            I18n.t("data_638"),
-            I18n.t("data_639"),
-            I18n.t("data_640")
-          ],
-          categories: [],
-          hidden: false
-        ),
-        new(
-          id: 119,
-          title: I18n.t("data_642"),
-          image_url: "" ,
-          description: [
-            I18n.t("data_643"),
-            I18n.t("data_644")
+            I18n.t("data_624"),
+            I18n.t("data_625"),
+            I18n.t("data_626"),
+            I18n.t("data_627")
           ],
           categories: [],
           hidden: false

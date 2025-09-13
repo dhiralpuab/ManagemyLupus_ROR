@@ -64,4 +64,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-#gem "honeybadger", "~> 6.0"
+gem "honeybadger", "~> 6.0"
