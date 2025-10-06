@@ -65,3 +65,4 @@ group :test do
 end
 
 #gem "honeybadger", "~> 6.0"
+gem "ruby-openai"

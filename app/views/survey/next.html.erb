@@ -12,14 +12,15 @@
         "steroids" => "Steroids",
         "treatment" => "Treatment",
         "biologic" => "Biologic/Med",
-        "sexspissues" => "Sex Sp Issues"
+        "sexspissues" => "Sex Sp Issues",
+        "foryou" => "For you"
       } %>
       <% current_status = session[:survey]&.[]("status") %>
 
       <% tabs.each do |key, label| %>
          <% next if key == "treatment" && current_status == "quiet" %>  
         <li class="nav-item">
-          <%= link_to label, survey_next_path(category: key), class: "nav-link #{'active' if params[:category] == key || (params[:category].blank? && key == 'all')}" %>
+          <%= link_to label, survey_next_path(category: key), class: "nav-link #{'active' if params[:category] == key || (params[:category].blank? && key == 'basic')}" %>
         </li>
       <% end %>
     </ul>
@@ -93,6 +94,8 @@
     </div>
   </div>
 </div>
+
+
 
 <script>
   document.addEventListener("turbo:load", () => {

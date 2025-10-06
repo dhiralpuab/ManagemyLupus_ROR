@@ -249,7 +249,7 @@ class SurveyCard
     ]
   end
 
-  def self.treatment
+  def self.biologic
       [
         new(
           id: 1,
@@ -785,7 +785,7 @@ class SurveyCard
     ]
   end
 
-  def self.biologic
+  def self.treatment
     [
       new(
         id: 1,
@@ -1566,15 +1566,185 @@ class SurveyCard
   end
 
   def self.sexspissues
-      [
-        new(
-          id: 1,
-          title: "Learning about my treatment options for Lupus",
-          image_url: "group_4.jpg" ,
-          description: ["This guide is for people with moderate to severe lupus."," What you learn in this guide will help you understand what is most important to you while deciding with your doctor how to manage your lupus."],
-          categories: [:basic]
-        )
+    [
+      new(
+        id: 1,
+        title: I18n.t("data_373"),
+        image_url: "woman.jpeg",
+        description: [
+          I18n.t("data_374"),
+          I18n.t("data_375"),
+          I18n.t("data_376")
+        ],
+        categories: [:active_kidneys, :f]
+      ),
+
+      new(
+        id: 2,
+        title: I18n.t("data_377"),
+        image_url: "coffee.jpeg",
+        description: [
+          I18n.t("data_378") + I18n.t("data_379")
+        ],
+        categories: [:active_kidneys, :f]
+      ),
+
+      new(
+        id: 3,
+        title: I18n.t("data_380"),
+        image_url: "baby.jpg",
+        description: [
+          I18n.t("data_381")
+        ],
+        categories: [:active_kidneys, :f]
+      ),
+
+      new(
+        id: 4,
+        title: I18n.t("data_382"),
+        image_url: "woman_black_shirt.jpg",
+        description: [
+          I18n.t("data_383"),
+          I18n.t("data_384")
+        ],
+        categories: [:active_kidneys, :f]
+      ),
+
+      new(
+        id: 5,
+        title: I18n.t("data_385"),
+        image_url: "pregnant_graph.png",
+        description: [
+          I18n.t("data_386"),
+          I18n.t("data_387"),
+          I18n.t("data_388")
+        ],
+        categories: [:a, :b, :f]
+      ),
+
+      new(
+        id: 6,
+        title: I18n.t("data_389"),
+        image_url: "baby_ci.png",
+        description: [
+          I18n.t("data_390"),
+          I18n.t("data_391"),
+          I18n.t("data_392")
+        ],
+        categories: [:c, :f]
+      ),
+
+      new(
+        id: 7,
+        title: I18n.t("data_393"),
+        image_url: "baby_d.png",
+        description: [
+          I18n.t("data_394"),
+          I18n.t("data_395"),
+          I18n.t("data_396")
+        ],
+        categories: [:d, :f]
+      ),
+
+      new(
+        id: 8,
+        title: I18n.t("data_397"),
+        image_url: "woman.jpeg",
+        description: [
+          I18n.t("data_398"),
+          I18n.t("data_399")
+        ],
+        categories: [:active_kidneys, :f]
+      ),
+
+      new(
+        id: 9,
+        title: I18n.t("data_400"),
+        image_url: "woman.jpeg",
+        description: [
+          I18n.t("data_401"),
+          I18n.t("data_402"),
+          I18n.t("data_403"),
+          I18n.t("data_404"),
+          I18n.t("data_405")
+        ],
+        categories: [:active_kidneys, :f]
+      ),
+
+      new(
+        id: 10,
+        title: I18n.t("data_406"),
+        image_url: "lupron_helps.png",
+        description: [
+          I18n.t("data_407")
+        ],
+        categories: [:active_kidneys, :f]
+      ),
+
+      new(
+        id: 11,
+        title: I18n.t("data_408"),
+        image_url: "period_stopping.png",
+        description: [
+          I18n.t("data_409"),
+          I18n.t("data_410")
+        ],
+        categories: [:a, :b, :f]
+      ),
+
+      new(
+        id: 12,
+        title: I18n.t("data_411"),
+        image_url: "stopping_periods_ci.png",
+        description: [
+          I18n.t("data_412"),
+          I18n.t("data_413"),
+          I18n.t("data_414")
+        ],
+        categories: [:c, :f]
+      ),
+
+      new(
+        id: 13,
+        title: I18n.t("data_416"),
+        image_url: "stopping_periods_imuran.png",
+        description: [
+          I18n.t("data_417"),
+          I18n.t("data_418")
+        ],
+        categories: [:d, :f]
+      ),
+
+      # scenario a/b/c/d && sex=m
+      new(
+        id: 14,
+        title: I18n.t("data_419"),
+        image_url: "",
+        description: [
+          I18n.t("data_420"),
+          I18n.t("data_421"),
+          I18n.t("data_422"),
+          I18n.t("data_423"),
+          I18n.t("data_424")
+        ],
+        categories: [:active_kidneys, :m]
+      ),
+
+      new(
+        id: 15,
+        title: I18n.t("data_425"),
+        image_url: "doctor_2.jpeg",
+        description: [
+          I18n.t("data_426"),
+          I18n.t("data_427"),
+          I18n.t("data_428"),
+          I18n.t("data_429"),
+          I18n.t("data_430")
+        ],
+        categories: [:active_kidneys, :m]
+      )
     ]
+
   end
 
   def self.by_category(cat)
