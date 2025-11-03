@@ -8,7 +8,7 @@ class SurveyController < ApplicationController
       kidney_treatment: params[:kidney_treatment],
       notes: params[:notes]
     }
-    Rails.logger.info "OpenAI API Key present? #{ENV['OPENAI_API_KEY'].present?}"
+    
     redirect_to survey_next_path(category: "basic")
   end
 
