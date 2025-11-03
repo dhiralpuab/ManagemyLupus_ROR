@@ -12,15 +12,15 @@
         "steroids" => "Steroids",
         "treatment" => "Treatment",
         "biologic" => "Biologic/Med",
-        "sexspissues" => "Sex Sp Issues"
+        "sexspissues" => "Sex Sp Issues",
+        "foryou" => "For you"
       } %>
       <% current_status = session[:survey]&.[]("status") %>
-      <% notes = session[:survey]&.[]("notes") %>
+
       <% tabs.each do |key, label| %>
-        <% next if key == "treatment" && current_status == "quiet" %>  
-        <% next if key == "foryou" && notes == "" %>
+         <% next if key == "treatment" && current_status == "quiet" %>  
         <li class="nav-item">
-          <%= link_to label, survey_next_path(category: key), class: "nav-link #{'active' if params[:category] == key || (params[:category].blank? && key == 'all')}" %>
+          <%= link_to label, survey_next_path(category: key), class: "nav-link #{'active' if params[:category] == key || (params[:category].blank? && key == 'basic')}" %>
         </li>
       <% end %>
     </ul>
@@ -95,35 +95,8 @@
   </div>
 </div>
 
-<<<<<<< Updated upstream
-=======
-<!-- Floating Chat Button -->
-<button id="chatButton" class="btn btn-primary rounded-circle shadow-lg"
-        style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; z-index: 1055;">
-  💬
-</button>
-
-<!-- Chat Box -->
-<div id="chatBox" class="card shadow-lg border-0"
-     style="position: fixed; bottom: 90px; right: 20px; width: 320px; height: 400px;
-            display: none; z-index: 1055; border-radius: 1rem; overflow: hidden;">
-  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2 px-3">
-    <span>Chat Support</span>
-    <button type="button" class="btn-close btn-close-white" id="closeChat"></button>
-  </div>
-  <div class="card-body d-flex flex-column p-2" style="height: calc(100% - 45px);">
-    <div id="chatMessages" class="flex-grow-1 overflow-auto mb-2 border rounded p-2 bg-light">
-      <p class="text-muted small">👋 Hi! How can we help you today? (AI NOT CONNECTED, PLEASE CHECK BACK LATER) </p>
-    </div>
-    <form id="chatForm" class="d-flex">
-      <input type="text" id="chatInput" class="form-control me-2" placeholder="Type a message..." autocomplete="off">
-      <button type="submit" class="btn btn-primary">Send</button>
-    </form>
-  </div>
-</div>
 
 
->>>>>>> Stashed changes
 <script>
   document.addEventListener("turbo:load", () => {
     const cards = <%= raw @cards.map { |card| 
@@ -148,6 +121,7 @@
     }
   }.to_json.html_safe %>;
 
+    console.log(allCards);
     const modalEl = document.getElementById('singleModal');
     const learnModalEl = document.getElementById('learnModal');
     
@@ -321,48 +295,4 @@
     });
   });
 
-</script>
-
-<script>
-  document.addEventListener("turbo:load", () => {
-    const chatButton = document.getElementById("chatButton");
-    const chatBox = document.getElementById("chatBox");
-    const closeChat = document.getElementById("closeChat");
-    const chatForm = document.getElementById("chatForm");
-    const chatInput = document.getElementById("chatInput");
-    const chatMessages = document.getElementById("chatMessages");
-
-    // Toggle open/close
-    chatButton.addEventListener("click", () => {
-      chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
-    });
-
-    closeChat.addEventListener("click", () => {
-      chatBox.style.display = "none";
-    });
-
-    // Handle sending a message (simple local echo)
-    chatForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const message = chatInput.value.trim();
-      if (!message) return;
-
-      const msgEl = document.createElement("div");
-      msgEl.className = "text-end";
-      msgEl.innerHTML = `<span class="badge bg-primary text-wrap">${message}</span>`;
-      chatMessages.appendChild(msgEl);
-
-      chatInput.value = "";
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-
-      // Simulated bot response (you can replace with real API later)
-      setTimeout(() => {
-        const reply = document.createElement("div");
-        reply.className = "text-start";
-        reply.innerHTML = `<br><span class="badge bg-secondary text-wrap">Thanks for your message! We are still working on this feature.</span>`;
-        chatMessages.appendChild(reply);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, 1000);
-    });
-  });
 </script>
