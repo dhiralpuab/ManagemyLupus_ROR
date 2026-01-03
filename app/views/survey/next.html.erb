@@ -21,7 +21,11 @@
         <% next if key == "treatment" && current_status == "quiet" %>  
         <% next if key == "foryou" && notes == "" %>
         <li class="nav-item">
-          <%= link_to label, survey_next_path(category: key), class: "nav-link #{'active' if params[:category] == key || (params[:category].blank? && key == 'basic')}" %>
+          <%= link_to label, survey_next_path(category: key), class: [
+        "nav-link",
+        ("active" if params[:category] == key || (params[:category].blank? && key == "basic")),
+        ("foryou-glow" if key == "foryou")
+      ].compact.join(" ") %>
         </li>
       <% end %>
     </ul>
@@ -95,6 +99,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Floating Chat Button -->
 <button id="chatButton" class="btn btn-primary rounded-circle shadow-lg"

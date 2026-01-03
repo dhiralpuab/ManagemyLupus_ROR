@@ -67,7 +67,7 @@ html, body {
   background: white;
   padding: 2rem;
   border-radius: 12px;
-  max-width: 400px;
+  max-width: 550px;
   width: 90%;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   position: relative;
@@ -162,4 +162,34 @@ html, body {
 
 .modal-content {
   will-change: transform;
+}
+
+@keyframes pulse-gold {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(255, 193, 7, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+  }
+}
+
+#learnBtn {
+  animation: pulse-gold 1.5s ease-out 5;
+}
+
+.foryou-glow {
+  position: relative;
+  animation: pulse-gold 1.4s ease-out 3;
+  border-radius: 0.375rem; /* matches Bootstrap tabs */
+}
+
+.modal-content-custom {
+  max-height: 90vh;
+  overflow-y: auto;
+
+  width: 90%;
+  max-width: 800px;
 }

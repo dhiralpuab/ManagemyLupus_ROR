@@ -28,7 +28,7 @@ class SurveyController < ApplicationController
       user_embedding = SurveyHelper.get_embedding(notes_text)
 
       Rails.logger.info "User notes: #{notes_text}"
-      Rails.logger.info "User embedding first 10 values: #{user_embedding[0..9].join(', ')}"
+      Rails.logger.info "User embedding first 5 values: #{user_embedding[0..4].join(', ')}"
     end
 
 
@@ -91,7 +91,7 @@ class SurveyController < ApplicationController
       end
       .compact
       .sort_by { |_, score| -score }
-      .first(10)
+      .first(5)
       .map(&:first)
   end
 
