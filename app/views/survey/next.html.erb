@@ -59,7 +59,7 @@
 </div>
 
 <!-- Single modal -->
-<div class="modal fade" id="singleModal" tabindex="-1" aria-labelledby="singleModalLabel" aria-hidden="true">
+<div class="modal fade" id="singleModal" tabindex="-1" aria-labelledby="singleModalLabel" >
   <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
     <div class="modal-content overflow-hidden position-relative">
       <div class="modal-header">
@@ -81,7 +81,7 @@
 </div>
 
 <!-- Learn more modal -->
-<div class="modal fade" id="learnModal" tabindex="-1" aria-labelledby="learnModalLabel" aria-hidden="true">
+<div class="modal fade" id="learnModal" tabindex="-1" aria-labelledby="learnModalLabel" >
   <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
     <div class="modal-content overflow-hidden position-relative ">
       <div class="modal-header">
@@ -101,11 +101,11 @@
 </div>
 
 
-<!-- Floating Chat Button -->
+<!-- Floating Chat Button 
 <button id="chatButton" class="btn btn-primary rounded-circle shadow-lg"
         style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; z-index: 1055;">
   💬
-</button>
+</button> -->
 
 <!-- Chat Box -->
 <div id="chatBox" class="card shadow-lg border-0"
@@ -140,16 +140,16 @@
           learn_more_id: card.learn_more_id
         }
       }.to_json.html_safe %> ;
-    const allCards = <%= raw @learn_more_cards.map { |card|
-    {
-      id: card.id,
-      title: card.title,
-      description: card.description,
-      image_url: asset_path(card.image_url),
-      learn_more: card.learn_more,
-      learn_more_id: card.learn_more_id
-    }
-  }.to_json.html_safe %>;
+      const allCards = <%= raw @learn_more_cards.map { |card|
+      {
+        id: card.id,
+        title: card.title,
+        description: card.description,
+        image_url: asset_path(card.image_url),
+        learn_more: card.learn_more,
+        learn_more_id: card.learn_more_id
+      }
+    }.to_json.html_safe %>;
 
     const modalEl = document.getElementById('singleModal');
     const learnModalEl = document.getElementById('learnModal');
@@ -196,11 +196,18 @@
           modalLabel.textContent = card.title;
           modalImage.src = card.image_url;
           modalImage.alt = card.title;
-
+          
           if (Array.isArray(card.description)) {
             modalDescription.innerHTML = '<ul>' + card.description.map(point => `<li>${point}</li>`).join('') + '</ul>';
           } else {
             modalDescription.textContent = card.description;
+          }
+
+          if (card.learn_more) {
+            modalLearnMore.textContent = card.learn_more;
+            modalLearnMore.style.display = "block";   // show button
+          } else {
+            modalLearnMore.style.display = "none";    // hide button
           }
 
           modalContent.style.transition = 'none';
@@ -328,7 +335,7 @@
 
 <script>
   document.addEventListener("turbo:load", () => {
-    const chatButton = document.getElementById("chatButton");
+    //const chatButton = document.getElementById("chatButton");
     const chatBox = document.getElementById("chatBox");
     const closeChat = document.getElementById("closeChat");
     const chatForm = document.getElementById("chatForm");
@@ -336,9 +343,9 @@
     const chatMessages = document.getElementById("chatMessages");
 
     // Toggle open/close
-    chatButton.addEventListener("click", () => {
-      chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
-    });
+    //chatButton.addEventListener("click", () => {
+      //chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
+    //});
 
     closeChat.addEventListener("click", () => {
       chatBox.style.display = "none";

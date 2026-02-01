@@ -281,7 +281,7 @@ class SurveyCard
         new(
           id: 3,
           title: I18n.t("data_463"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_464"),
             I18n.t("data_465"),
@@ -293,7 +293,7 @@ class SurveyCard
         new(
           id: 4,
           title: I18n.t("data_476"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_477"),
             I18n.t("data_478"),
@@ -315,7 +315,7 @@ class SurveyCard
         new(
           id: 6,
           title: I18n.t("data_483"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_484"),
             I18n.t("data_485"),
@@ -331,7 +331,7 @@ class SurveyCard
         new(
           id: 7,
           title: I18n.t("data_491"),
-          image_url: "",
+          image_url: "no_image.png",
           description: [
             I18n.t("data_492"),
             I18n.t("data_493"),
@@ -489,7 +489,7 @@ class SurveyCard
         new(
           id: 20,
           title: I18n.t("data_647"),
-          image_url: "",
+          image_url: "no_image.png",
           description: [
             I18n.t("data_648"),
             I18n.t("data_649"),
@@ -864,7 +864,7 @@ class SurveyCard
       new(
         id: 8,
         title: I18n.t("data_148"),
-        image_url: "",
+        image_url: "no_image.png",
         description: [
           I18n.t("data_149"),
           I18n.t("data_150"),
@@ -877,7 +877,7 @@ class SurveyCard
       new(
         id: 9,
         title: I18n.t("data_153"),
-        image_url: "",
+        image_url: "no_image.png",
         description: [
           I18n.t("data_154"),
           I18n.t("data_155")
@@ -888,7 +888,7 @@ class SurveyCard
       new(
         id: 10,
         title: I18n.t("data_156"),
-        image_url: "",
+        image_url: "no_image.png",
         description: [
           I18n.t("data_157"),
           I18n.t("data_158")
@@ -1340,7 +1340,7 @@ class SurveyCard
       new(
         id: 45,
         title: I18n.t("data_308"),
-        image_url: "",
+        image_url: "no_image.png",
         description: [
           I18n.t("data_309"),
           I18n.t("data_310")
@@ -1401,7 +1401,7 @@ class SurveyCard
       new(
         id: 51,
         title: I18n.t("data_323"),
-        image_url: "",
+        image_url: "no_image.png",
         description: [
           I18n.t("data_324"),
           I18n.t("data_325"),
@@ -1719,7 +1719,7 @@ class SurveyCard
       new(
         id: 14,
         title: I18n.t("data_419"),
-        image_url: "",
+        image_url: "no_image.png",
         description: [
           I18n.t("data_420"),
           I18n.t("data_421"),
@@ -1780,7 +1780,7 @@ class SurveyCard
         new(
           id: 103,
           title: I18n.t("data_547"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_548"),
             I18n.t("data_549"),
@@ -1792,7 +1792,7 @@ class SurveyCard
         new(
           id: 104,
           title: I18n.t("data_552"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_553"),
             I18n.t("data_554"),
@@ -1805,7 +1805,7 @@ class SurveyCard
         new(
           id: 105,
           title: I18n.t("data_558"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_559"),
             I18n.t("data_560"),
@@ -1898,7 +1898,7 @@ class SurveyCard
         new(
           id: 112,
           title: I18n.t("data_602"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_603"),
             I18n.t("data_604"),
@@ -1910,7 +1910,7 @@ class SurveyCard
         new(
           id: 113,
           title: I18n.t("data_607"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_608"),
             I18n.t("data_609")
@@ -1949,7 +1949,7 @@ class SurveyCard
         new(
           id: 116,
           title: I18n.t("data_623"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_624"),
             I18n.t("data_625"),
@@ -1964,7 +1964,7 @@ class SurveyCard
         new(
           id: 117,
           title: I18n.t("data_629"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_630"),
             I18n.t("data_631"),
@@ -1977,7 +1977,7 @@ class SurveyCard
         new(
           id: 118,
           title: I18n.t("data_635"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_636"),
             I18n.t("data_637"),
@@ -1991,7 +1991,7 @@ class SurveyCard
         new(
           id: 119,
           title: I18n.t("data_642"),
-          image_url: "" ,
+          image_url: "no_image.png" ,
           description: [
             I18n.t("data_643"),
             I18n.t("data_644")
