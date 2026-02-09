@@ -621,7 +621,9 @@ class SurveyCard
             I18n.t("data_523"),
             I18n.t("data_524")
           ],
-          categories: [:active_kidneys]
+          categories: [:active_kidneys],
+          learn_more: I18n.t("data_569"),
+          learn_more_id: 107
         ),
 
         new(
@@ -635,7 +637,9 @@ class SurveyCard
             I18n.t("data_529"),
             I18n.t("data_530")
           ],
-          categories: [:active_kidneys]
+          categories: [:active_kidneys],
+          learn_more: I18n.t("data_622"),
+          learn_more_id: 116
         ),
 
         new(
@@ -777,9 +781,7 @@ class SurveyCard
             I18n.t("data_122"),
             I18n.t("data_123")
           ],
-          categories: [],
-          learn_more: I18n.t("data_569"),
-          learn_more_id: 107
+          categories: []
         ),
 
     ]
@@ -1011,6 +1013,8 @@ class SurveyCard
           I18n.t("data_197"),
           I18n.t("data_198")
         ],
+        learn_more: I18n.t("data_574"),
+        learn_more_id: 108,
         categories: [:a, :b]
       ),
 
@@ -1023,6 +1027,8 @@ class SurveyCard
           I18n.t("data_201"),
           I18n.t("data_202")
         ],
+        learn_more: I18n.t("data_574"),
+        learn_more_id: 108,
         categories: [:c]
       ),
 
@@ -1063,7 +1069,9 @@ class SurveyCard
           I18n.t("data_213"),
           I18n.t("data_214")
         ],
-        categories: [:d]
+        categories: [:d],
+        learn_more: I18n.t("data_579"),
+        learn_more_id: 109
       ),
 
       new(
@@ -1089,7 +1097,9 @@ class SurveyCard
           I18n.t("data_221"),
           I18n.t("data_222")
         ],
-        categories: [:c]
+        categories: [:c],
+        learn_more: I18n.t("data_585"),
+        learn_more_id: 110
       ),
 
       new(
@@ -1143,7 +1153,9 @@ class SurveyCard
           I18n.t("data_244"),
           I18n.t("data_245")
         ],
-        categories: [:c]
+        categories: [:c],
+        learn_more: I18n.t("data_591"),
+        learn_more_id: 111
       ),
 
       new(
@@ -1158,7 +1170,9 @@ class SurveyCard
           I18n.t("data_251"),
           I18n.t("data_252")
         ],
-        categories: [:d]
+        categories: [:d],
+        learn_more: I18n.t("data_591"),
+        learn_more_id: 111
       ),
 
       new(
@@ -1185,7 +1199,9 @@ class SurveyCard
           I18n.t("data_260"),
           I18n.t("data_261")
         ],
-        categories: [:c]
+        categories: [:c],
+        learn_more: I18n.t("data_610"),
+        learn_more_id: 114
       ),
 
       new(
@@ -1293,9 +1309,7 @@ class SurveyCard
           I18n.t("data_296"),
           I18n.t("data_297")
         ],
-        categories: [:d],
-        learn_more: I18n.t("data_622"),
-        learn_more_id: 116
+        categories: [:d]
       ),
 
       new(
@@ -1576,7 +1590,7 @@ class SurveyCard
           I18n.t("data_375"),
           I18n.t("data_376")
         ],
-        categories: [:active_kidneys, :f]
+        categories: [:active_kidneys, :female]
       ),
 
       new(
@@ -1586,7 +1600,7 @@ class SurveyCard
         description: [
           I18n.t("data_378") + I18n.t("data_379")
         ],
-        categories: [:active_kidneys, :f]
+        categories: [:active_kidneys, :female]
       ),
 
       new(
@@ -1596,7 +1610,7 @@ class SurveyCard
         description: [
           I18n.t("data_381")
         ],
-        categories: [:active_kidneys, :f]
+        categories: [:active_kidneys, :female]
       ),
 
       new(
@@ -1607,7 +1621,7 @@ class SurveyCard
           I18n.t("data_383"),
           I18n.t("data_384")
         ],
-        categories: [:active_kidneys, :f]
+        categories: [:active_kidneys, :female]
       ),
 
       new(
@@ -1619,7 +1633,7 @@ class SurveyCard
           I18n.t("data_387"),
           I18n.t("data_388")
         ],
-        categories: [:a, :b, :f]
+        categories: [:a, :b, :female]
       ),
 
       new(
@@ -1631,7 +1645,7 @@ class SurveyCard
           I18n.t("data_391"),
           I18n.t("data_392")
         ],
-        categories: [:c, :f]
+        categories: [:c, :female]
       ),
 
       new(
@@ -1643,7 +1657,7 @@ class SurveyCard
           I18n.t("data_395"),
           I18n.t("data_396")
         ],
-        categories: [:d, :f]
+        categories: [:d, :female]
       ),
 
       new(
@@ -1654,7 +1668,7 @@ class SurveyCard
           I18n.t("data_398"),
           I18n.t("data_399")
         ],
-        categories: [:active_kidneys, :f]
+        categories: [:active_kidneys, :female]
       ),
 
       new(
@@ -1668,7 +1682,7 @@ class SurveyCard
           I18n.t("data_404"),
           I18n.t("data_405")
         ],
-        categories: [:active_kidneys, :f]
+        categories: [:active_kidneys, :female]
       ),
 
       new(
@@ -1678,7 +1692,7 @@ class SurveyCard
         description: [
           I18n.t("data_407")
         ],
-        categories: [:active_kidneys, :f]
+        categories: [:active_kidneys, :female]
       ),
 
       new(
@@ -1689,7 +1703,7 @@ class SurveyCard
           I18n.t("data_409"),
           I18n.t("data_410")
         ],
-        categories: [:a, :b, :f]
+        categories: [:a, :b, :female]
       ),
 
       new(
@@ -1701,7 +1715,7 @@ class SurveyCard
           I18n.t("data_413"),
           I18n.t("data_414")
         ],
-        categories: [:c, :f]
+        categories: [:c, :female]
       ),
 
       new(
@@ -1712,7 +1726,7 @@ class SurveyCard
           I18n.t("data_417"),
           I18n.t("data_418")
         ],
-        categories: [:d, :f]
+        categories: [:d, :female]
       ),
 
       # scenario a/b/c/d && sex=m
@@ -1727,7 +1741,7 @@ class SurveyCard
           I18n.t("data_423"),
           I18n.t("data_424")
         ],
-        categories: [:active_kidneys, :m]
+        categories: [:active_kidneys, :male]
       ),
 
       new(
@@ -1741,7 +1755,7 @@ class SurveyCard
           I18n.t("data_429"),
           I18n.t("data_430")
         ],
-        categories: [:active_kidneys, :m]
+        categories: [:active_kidneys, :male]
       )
     ]
 
@@ -1792,7 +1806,7 @@ class SurveyCard
         new(
           id: 104,
           title: I18n.t("data_552"),
-          image_url: "no_image.png" ,
+          image_url: "clean_face.jpeg" ,
           description: [
             I18n.t("data_553"),
             I18n.t("data_554"),
@@ -1805,7 +1819,7 @@ class SurveyCard
         new(
           id: 105,
           title: I18n.t("data_558"),
-          image_url: "no_image.png" ,
+          image_url: "raising_hands.jpeg" ,
           description: [
             I18n.t("data_559"),
             I18n.t("data_560"),

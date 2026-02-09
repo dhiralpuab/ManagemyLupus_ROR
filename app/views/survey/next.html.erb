@@ -19,6 +19,8 @@
       <% notes = session[:survey]&.[]("notes") %>
       <% tabs.each do |key, label| %>
         <% next if key == "treatment" && current_status == "quiet" %>  
+        <% next if key == "sexspissues" && current_status == "quiet" %> 
+        <% next if key == "treatment" && current_status == "active_no_kidneys" %> 
         <% next if key == "foryou" && notes == "" %>
         <li class="nav-item">
           <%= link_to label, survey_next_path(category: key), class: [
@@ -64,6 +66,7 @@
     <div class="modal-content overflow-hidden position-relative">
       <div class="modal-header">
         <h5 class="modal-title" id="singleModalLabel"></h5>
+        <p id="singleModalId" hidden></p>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
@@ -128,251 +131,272 @@
 
 
 <script>
-  document.addEventListener("turbo:load", () => {
-    const cards = <%= raw @cards.map { |card| 
-        {
-          id: card.id,
-          title: card.title,
-          description: card.description,
-          categories: card.categories,
-          image_url: asset_path(card.image_url),
-          learn_more: card.learn_more,
-          learn_more_id: card.learn_more_id
-        }
-      }.to_json.html_safe %> ;
-      const allCards = <%= raw @learn_more_cards.map { |card|
-      {
-        id: card.id,
-        title: card.title,
-        description: card.description,
-        image_url: asset_path(card.image_url),
-        learn_more: card.learn_more,
-        learn_more_id: card.learn_more_id
-      }
-    }.to_json.html_safe %>;
+document.addEventListener("turbo:load", () => {
 
-    const modalEl = document.getElementById('singleModal');
-    const learnModalEl = document.getElementById('learnModal');
-    
-    //Dispose existing modal instance if any, then create new one
-    let modalInstance = bootstrap.Modal.getInstance(modalEl);
-    if (modalInstance) {
-      modalInstance.dispose();
+  /* -------------------------
+     SAFETY HELPERS
+  ------------------------- */
+  const byId = (id) => document.getElementById(id);
+  const exists = (el) => el !== null;
+
+  function cleanBackdrops() {
+    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    document.body.classList.remove('modal-open');
+    document.body.style.paddingRight = '';
+  }
+
+  function closeAllModals() {
+    // Hide modals using Bootstrap's API
+    if (modalInstance) modalInstance.hide();
+    if (learnModalInstance) learnModalInstance.hide();
+  }
+
+
+  /* -------------------------
+     DATA FROM RAILS
+  ------------------------- */
+  const cards = <%= raw @cards.map { |card|
+    {
+      id: card.id,
+      title: card.title,
+      description: card.description,
+      categories: card.categories,
+      image_url: asset_path(card.image_url),
+      learn_more: card.learn_more,
+      learn_more_id: card.learn_more_id
     }
-    modalInstance = new bootstrap.Modal(modalEl);
+  }.to_json.html_safe %>;
+  
 
-    // Clean up backdrop and body classes on modal close
-    modalEl.addEventListener('hidden.bs.modal', () => {
-      document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-      document.body.classList.remove('modal-open');
-      document.body.style.paddingRight = '';
-    });
+  const allCards = <%= raw @learn_more_cards.map { |card|
+    {
+      id: card.id,
+      title: card.title,
+      description: card.description,
+      image_url: asset_path(card.image_url),
+      learn_more: card.learn_more,
+      learn_more_id: card.learn_more_id
+    }
+  }.to_json.html_safe %>;
 
-    let currentIndex = 0;
-    let learnIndex = 0;
-    const modalLabel = document.getElementById('singleModalLabel');
-    const modalLearnMore = document.getElementById('learnBtn');
-    const modalImage = document.getElementById('modalImage');
-    const modalDescription = document.getElementById('modalDescription');
-    const modalContent = modalEl.querySelector('.modal-content');
+  if (!cards || cards.length === 0) return;
 
-    const learnModalLabel = document.getElementById('learnModalLabel');
-    const learnModalImage = document.getElementById('learnModalImage');
-    const modalLearnLearnMore = document.getElementById('learn-learnBtn');
-    const learnModalDescription = document.getElementById('learnModalDescription');
-    // const learnModalContent = learnModalEl.querySelector('.learn-modal-content');
+  /* -------------------------
+     MODAL ELEMENTS
+  ------------------------- */
+  const modalEl = byId('singleModal');
+  const learnModalEl = byId('learnModal');
 
-    function showModalContent(index, direction = null) {
-      if (index < 0) index = cards.length - 1;
-      if (index >= cards.length) index = 0;
+  if (!modalEl) return;
 
-      const card = cards[index];
+  let modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl, {
+    backdrop: true,
+    focus: true
+  });
 
-      if (direction) {
-        modalContent.style.transition = 'transform 0.4s ease';
-        modalContent.style.transform = `translateX(${direction === 'next' ? '-100%' : '100%'})`;
+  let learnModalInstance = learnModalEl
+    ? bootstrap.Modal.getOrCreateInstance(learnModalEl, {
+        backdrop: true,
+        focus: true
+      })
+    : null;
 
-        setTimeout(() => {
-          modalLabel.textContent = card.title;
-          modalImage.src = card.image_url;
-          modalImage.alt = card.title;
-          
-          if (Array.isArray(card.description)) {
-            modalDescription.innerHTML = '<ul>' + card.description.map(point => `<li>${point}</li>`).join('') + '</ul>';
-          } else {
-            modalDescription.textContent = card.description;
-          }
 
-          if (card.learn_more) {
-            modalLearnMore.textContent = card.learn_more;
-            modalLearnMore.style.display = "block";   // show button
-          } else {
-            modalLearnMore.style.display = "none";    // hide button
-          }
+  let currentIndex = 0;
+  let learnIndex = null;
 
-          modalContent.style.transition = 'none';
-          modalContent.style.transform = `translateX(${direction === 'next' ? '100%' : '-100%'})`;
+  const modalLabel = byId('singleModalLabel');
+  const modalId = byId('singleModalId');
+  const modalImage = byId('modalImage');
+  const modalDescription = byId('modalDescription');
+  const modalLearnBtn = byId('learnBtn');
+  const modalContent = modalEl.querySelector('.modal-content');
 
-          requestAnimationFrame(() => {
-            modalContent.style.transition = 'transform 0.4s ease';
-            modalContent.style.transform = 'translateX(0)';
-          });
-        }, 400);
+  const learnModalLabel = byId('learnModalLabel');
+  const learnModalImage = byId('learnModalImage');
+  const learnModalDescription = byId('learnModalDescription');
+  const learnLearnBtn = byId('learn-learnBtn');
+
+  /* -------------------------
+     MAIN MODAL CONTENT
+  ------------------------- */
+  function showModalContent(index, direction = null) {
+  
+    if (index < 0) index = 0;
+
+    if (exists(byId('nextBtn'))) {
+      if (index >= cards.length - 1) {
+        byId('nextBtn').style.display = 'none';
       } else {
-        modalLabel.textContent = card.title;
-        modalImage.src = card.image_url;
-        modalImage.alt = card.title;
-        if (card.learn_more) {
-          modalLearnMore.textContent = card.learn_more;
-          modalLearnMore.style.display = "block";   // show button
-        } else {
-          modalLearnMore.style.display = "none";    // hide button
-        }
+        byId('nextBtn').style.display = 'inline-block';
+      }
+    }
 
-        if (Array.isArray(card.description)) {
-          modalDescription.innerHTML = '<ul>' + card.description.map(point => `<li>${point}</li>`).join('') + '</ul>';
-        } else {
-          modalDescription.textContent = card.description;
-        }
-        
-        modalContent.style.transform = 'translateX(0)';
+   
+
+    const card = cards[index];
+    if (!card) return;
+
+    const render = () => {
+      modalId.textContent = card.id;
+      modalLabel.textContent = card.title;
+      modalImage.src = card.image_url;
+      modalImage.alt = card.title;
+
+      if (Array.isArray(card.description)) {
+        modalDescription.innerHTML =
+          '<ul>' + card.description.map(p => `<li>${p}</li>`).join('') + '</ul>';
+      } else {
+        modalDescription.textContent = card.description;
+      }
+
+      if (card.learn_more) {
+        modalLearnBtn.style.display = "block";
+        modalLearnBtn.textContent = card.learn_more;
+      } else {
+        modalLearnBtn.style.display = "none";
       }
 
       currentIndex = index;
       learnIndex = card.learn_more_id;
+    };
+
+    if (direction && modalContent) {
+      modalContent.style.transition = 'transform 0.3s ease';
+      modalContent.style.transform =
+        direction === 'next' ? 'translateX(-100%)' : 'translateX(100%)';
+
+      setTimeout(() => {
+        render();
+        modalContent.style.transition = 'none';
+        modalContent.style.transform =
+          direction === 'next' ? 'translateX(100%)' : 'translateX(-100%)';
+
+        requestAnimationFrame(() => {
+          modalContent.style.transition = 'transform 0.3s ease';
+          modalContent.style.transform = 'translateX(0)';
+        });
+      }, 300);
+    } else {
+      render();
+    }
+  }
+
+  /* -------------------------
+     LEARN MORE MODAL
+  ------------------------- */
+  function showLearnContent(fromLearnId = null) {
+    const card = fromLearnId
+      ? allCards.find(c => c.id === fromLearnId)
+      : allCards.find(c => c.id === learnIndex);
+
+    if (!card || !learnModalInstance) return;
+
+    learnModalLabel.textContent = card.title;
+    learnModalImage.src = card.image_url;
+    learnModalImage.alt = card.title;
+
+    if (Array.isArray(card.description)) {
+      learnModalDescription.innerHTML =
+        '<ul>' + card.description.map(p => `<li>${p}</li>`).join('') + '</ul>';
+    } else {
+      learnModalDescription.textContent = card.description;
     }
 
-    function showLearnContent(index, learnIndex = null) {
-      let card = learnIndex ? allCards.find(c => c.id === learnIndex) : cards[index];
-      if (!card || !card.learn_more_id) return;
-
-      const learnCard = allCards.find(c => c.id === card.learn_more_id);
-      if (!learnCard) return;
-
-      // Get any currently shown modal
-      const openModalEl = document.querySelector('.modal.show');
-      const showNextLearnModal = () => {
-        // Populate learn modal content
-        learnModalLabel.textContent = learnCard.title;
-        learnModalImage.src = learnCard.image_url;
-        learnModalImage.alt = learnCard.title;
-
-        if (Array.isArray(learnCard.description)) {
-          learnModalDescription.innerHTML =
-            '<ul>' + learnCard.description.map(p => `<li>${p}</li>`).join('') + '</ul>';
-        } else {
-          learnModalDescription.textContent = learnCard.description;
-        }
-
-        if (learnCard.learn_more) {
-          modalLearnLearnMore.style.display = 'block';
-          modalLearnLearnMore.onclick = () => showLearnContent(null, learnCard.learn_more_id);
-        } else {
-          modalLearnLearnMore.style.display = 'none';
-        }
-
-        const learnModalInstance = bootstrap.Modal.getOrCreateInstance(learnModalEl);
-        learnModalInstance.show();
-      };
-
-      if (openModalEl) {
-        const openModalInstance = bootstrap.Modal.getInstance(openModalEl);
-        if (openModalInstance) {
-          // Wait for it to fully hide, then show next modal
-          openModalEl.addEventListener('hidden.bs.modal', function handler() {
-            openModalEl.removeEventListener('hidden.bs.modal', handler);
-            showNextLearnModal();
-          });
-          openModalInstance.hide();
-        } else {
-          showNextLearnModal();
-        }
-      } else {
-        showNextLearnModal();
-      }
+    if (card.learn_more_id) {
+      learnLearnBtn.style.display = "block";
+      learnLearnBtn.onclick = () => showLearnContent(card.learn_more_id);
+    } else {
+      learnLearnBtn.style.display = "none";
     }
 
+    modalInstance.hide();
+    learnModalInstance.show();
+  }
 
-
-
-    // Remove any leftover backdrops before showing modal (extra safety)
-    function cleanBackdrops() {
-      document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-      document.body.classList.remove('modal-open');
-      document.body.style.paddingRight = '';
-    }
-
-    // Add event listeners to cards
-    document.querySelectorAll('.card[role="button"]').forEach(cardEl => {
-      cardEl.addEventListener('click', () => {
-        cleanBackdrops();
-        currentIndex = parseInt(cardEl.getAttribute('data-index'));
-        showModalContent(currentIndex);
-        modalInstance.show();
-      });
-    });
-    document.getElementById('learnBtn').addEventListener('click', () => {
-      cleanBackdrops();
-      showLearnContent(currentIndex);
-    });
-
-    document.getElementById('learn-learnBtn').addEventListener('click', () => {
-      cleanBackdrops();
-      showLearnContent(null,learnIndex);
-    });
-
-    // Prev/Next buttons
-    document.getElementById('prevBtn').addEventListener('click', () => {
-      showModalContent(currentIndex - 1, 'prev');
-    });
-
-    document.getElementById('nextBtn').addEventListener('click', () => {
-      showModalContent(currentIndex + 1, 'next');
+  /* -------------------------
+     EVENT LISTENERS
+  ------------------------- */
+  document.querySelectorAll('.card[role="button"]').forEach(cardEl => {
+    cardEl.addEventListener('click', () => {
+      // cleanBackdrops();
+      currentIndex = parseInt(cardEl.dataset.index, 10);
+      showModalContent(currentIndex);
+      modalInstance.show();
     });
   });
 
+  if (exists(byId('prevBtn'))) {
+    byId('prevBtn').addEventListener('click', () =>
+      showModalContent(currentIndex - 1, 'prev')
+    );
+  }
+
+  if (exists(byId('nextBtn'))) {
+    byId('nextBtn').addEventListener('click', () =>
+      showModalContent(currentIndex + 1, 'next')
+    );
+  }
+
+  if (exists(modalLearnBtn)) {
+    modalLearnBtn.addEventListener('click', () => {
+      // cleanBackdrops();
+      closeAllModals();
+      showLearnContent();
+    });
+  }
+
+  if (learnModalEl) {
+    learnModalEl.addEventListener('hidden.bs.modal', () => {
+    // cleanBackdrops();
+      closeAllModals();
+      setTimeout(() => modalInstance.show(), 100);
+    });
+  }
+
+});
 </script>
 
 <script>
-  document.addEventListener("turbo:load", () => {
-    //const chatButton = document.getElementById("chatButton");
-    const chatBox = document.getElementById("chatBox");
-    const closeChat = document.getElementById("closeChat");
-    const chatForm = document.getElementById("chatForm");
-    const chatInput = document.getElementById("chatInput");
-    const chatMessages = document.getElementById("chatMessages");
+document.addEventListener("turbo:load", () => {
+  const chatBox = document.getElementById("chatBox");
+  const closeChat = document.getElementById("closeChat");
+  const chatForm = document.getElementById("chatForm");
+  const chatInput = document.getElementById("chatInput");
+  const chatMessages = document.getElementById("chatMessages");
 
-    // Toggle open/close
-    //chatButton.addEventListener("click", () => {
-      //chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
-    //});
+  if (!chatBox) return;
 
-    closeChat.addEventListener("click", () => {
-      chatBox.style.display = "none";
-    });
-
-    // Handle sending a message (simple local echo)
-    chatForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const message = chatInput.value.trim();
-      if (!message) return;
-
-      const msgEl = document.createElement("div");
-      msgEl.className = "text-end";
-      msgEl.innerHTML = `<span class="badge bg-primary text-wrap">${message}</span>`;
-      chatMessages.appendChild(msgEl);
-
-      chatInput.value = "";
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-
-      // Simulated bot response (you can replace with real API later)
-      setTimeout(() => {
-        const reply = document.createElement("div");
-        reply.className = "text-start";
-        reply.innerHTML = `<br><span class="badge bg-secondary text-wrap">Thanks for your message! We are still working on this feature.</span>`;
-        chatMessages.appendChild(reply);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, 1000);
-    });
+  closeChat?.addEventListener("click", () => {
+    chatBox.style.display = "none";
   });
+
+  chatForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    chatMessages.insertAdjacentHTML(
+      "beforeend",
+      `<div class="text-end">
+        <span class="badge bg-primary text-wrap">${message}</span>
+      </div>`
+    );
+
+    chatInput.value = "";
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    setTimeout(() => {
+      chatMessages.insertAdjacentHTML(
+        "beforeend",
+        `<div class="text-start mt-2">
+          <span class="badge bg-secondary text-wrap">
+            Thanks for your message! We are still working on this feature.
+          </span>
+        </div>`
+      );
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 800);
+  });
+});
 </script>
