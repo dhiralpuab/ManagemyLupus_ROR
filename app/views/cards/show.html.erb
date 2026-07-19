@@ -1,0 +1,35 @@
+<div class="card-detail p-3">
+  <div class="text-center mb-4">
+    <h4 class="fw-bold"><%= @card.title %></h4>
+  </div>
+
+  <div class="text-center mb-4">
+    <%= image_tag @card.image_url,
+        alt: @card.title,
+        class: "rounded img-fluid",
+        style: "max-height: 300px; object-fit: contain;" %>
+  </div>
+
+  <div class="description">
+    <% if @card.description.is_a?(Array) %>
+      <ul class="list-unstyled">
+        <% @card.description.each do |item| %>
+          <li class="mb-2">
+            <i class="bi bi-check-circle text-success me-2"></i>
+            <%= item %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p><%= @card.description %></p>
+    <% end %>
+  </div>
+
+  <% if @card.learn_more.present? && @card.learn_more_id.present? %>
+    <div class="text-center mt-4">
+      <%= link_to @card.learn_more,
+          card_path(@card.learn_more_id),
+          class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

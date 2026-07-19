@@ -1,0 +1,116 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-images me-2"></i>Images (<%= @images.count %>)</h2>
+</div>
+
+<!-- Upload Form -->
+<div class="card mb-4">
+  <div class="card-header">
+    <h6 class="mb-0"><i class="bi bi-cloud-upload me-2"></i>Upload New Image</h6>
+  </div>
+  <div class="card-body">
+    <%= form_tag admin_images_path, method: :post, multipart: true, class: "row g-3 align-items-end" do %>
+      <div class="col-md-8">
+        <label class="form-label">Select Image</label>
+        <input type="file" name="image" accept="image/*" class="form-control" required>
+      </div>
+      <div class="col-md-4">
+        <%= submit_tag "Upload", class: "btn btn-primary w-100" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Search -->
+<div class="mb-4">
+  <input type="text" id="imageSearch" class="form-control" placeholder="Filter images by name...">
+</div>
+
+<!-- Images Grid -->
+<div class="row g-3" id="imagesGrid">
+  <% @images.each do |image| %>
+    <div class="col-6 col-md-4 col-lg-3 col-xl-2 image-item" data-name="<%= image.downcase %>">
+      <div class="card h-100">
+        <div class="position-relative">
+          <%= image_tag image,
+              class: "card-img-top",
+              style: "height: 120px; object-fit: cover; cursor: pointer;",
+              onclick: "showImageModal('#{image}')",
+              onerror: "this.style.display='none'" %>
+        </div>
+        <div class="card-body p-2">
+          <small class="text-truncate d-block" title="<%= image %>"><%= image %></small>
+          <div class="mt-2 d-flex gap-1">
+            <button class="btn btn-sm btn-outline-primary flex-grow-1" onclick="copyFilename('<%= image %>')" title="Copy filename">
+              <i class="bi bi-clipboard"></i>
+            </button>
+            <%= button_to admin_image_path(image),
+                method: :delete,
+                form: { data: { turbo_confirm: "Delete '#{image}'? This cannot be undone!" }, class: "d-inline mb-0" },
+                class: "btn btn-sm btn-outline-danger",
+                title: "Delete image" do %>
+              <i class="bi bi-trash"></i>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if @images.empty? %>
+  <div class="alert alert-info">
+    No images found. Upload some images to get started.
+  </div>
+<% end %>
+
+<!-- Legend -->
+<div class="mt-4 p-3 bg-light rounded">
+  <small class="text-muted">
+    <i class="bi bi-clipboard me-1"></i> Copy filename &nbsp;|&nbsp;
+    <i class="bi bi-trash me-1"></i> Delete
+  </small>
+</div>
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageModalTitle">Image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="imageModalImg" src="" class="img-fluid">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Search filter
+  document.getElementById('imageSearch').addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('.image-item').forEach(item => {
+      const name = item.dataset.name;
+      item.style.display = name.includes(query) ? '' : 'none';
+    });
+  });
+
+  // Show image modal
+  function showImageModal(filename) {
+    document.getElementById('imageModalTitle').textContent = filename;
+    document.getElementById('imageModalImg').src = '/assets/' + filename;
+    new bootstrap.Modal(document.getElementById('imageModal')).show();
+  }
+
+  // Copy filename
+  function copyFilename(filename) {
+    navigator.clipboard.writeText(filename).then(() => {
+      alert('Copied: ' + filename);
+    });
+  }
+
+</script>

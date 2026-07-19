@@ -1,0 +1,115 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>
+    <i class="bi bi-clock-history me-2"></i>Version History
+    <% if @category %>
+      <span class="badge bg-secondary"><%= @category.to_s.titleize %></span>
+    <% end %>
+  </h2>
+  <%= link_to "Back to Cards", admin_cards_path, class: "btn btn-outline-secondary" %>
+</div>
+
+<!-- Category Tabs -->
+<ul class="nav nav-tabs mb-4">
+  <% [:intro, :treatment, :steroids, :biologic, :sexspissues, :learn_cards].each do |cat| %>
+    <li class="nav-item">
+      <a class="nav-link <%= 'active' if @category == cat %>" href="<%= history_admin_cards_path(category: cat) %>">
+        <%= cat.to_s.titleize %>
+        <% edit_count = CardVersionService.list_versions(cat).count - 1 %>
+        <% if edit_count > 0 %>
+          <span class="badge bg-primary"><%= edit_count %></span>
+        <% end %>
+      </a>
+    </li>
+  <% end %>
+</ul>
+
+<% if @category %>
+  <% saved_versions = @versions.reject { |v| v == 'original' } %>
+
+  <% if saved_versions.empty? %>
+    <div class="alert alert-light border">
+      <i class="bi bi-check-circle text-success me-2"></i>
+      <strong>No changes made.</strong> Currently using original hardcoded data.
+    </div>
+  <% else %>
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Date & Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @versions.each_with_index do |version, index| %>
+              <tr class="<%= 'table-light' if version == 'original' %>">
+                <td>
+                  <% if version == 'original' %>
+                    <span class="badge bg-secondary me-2">
+                      <i class="bi bi-code-slash"></i> Original (Hardcoded)
+                    </span>
+                  <% else %>
+                    <code><%= version %></code>
+                    <% if index == 0 %>
+                      <span class="badge bg-success ms-2">Current</span>
+                    <% end %>
+                  <% end %>
+                </td>
+                <td>
+                  <% if version == 'original' %>
+                    <span class="text-muted">Built into code</span>
+                  <% elsif version =~ /(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/ %>
+                    <% datetime = Time.new($1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i) %>
+                    <%= datetime.strftime("%B %d, %Y at %I:%M %p") %>
+                  <% end %>
+                </td>
+                <td>
+                  <div class="d-flex gap-2 align-items-center">
+                    <%= link_to preview_version_admin_cards_path(category: @category, version: version),
+                        class: "btn btn-sm btn-outline-primary" do %>
+                      <i class="bi bi-eye"></i> Preview
+                    <% end %>
+                    <% unless index == 0 %>
+                      <%= button_to restore_version_admin_cards_path(category: @category, version: version),
+                          method: :post,
+                          form: { data: { turbo: false }, class: "d-inline mb-0" },
+                          class: "btn btn-sm btn-outline-warning",
+                          onclick: "return confirm('#{version == 'original' ? 'Restore to original hardcoded data? This will create a new version.' : 'Restore this version? A new version will be created.'}')" do %>
+                        <i class="bi bi-arrow-counterclockwise"></i> Restore
+                      <% end %>
+                    <% end %>
+                    <% if version != 'original' && index != 0 %>
+                      <%= button_to delete_version_admin_cards_path(category: @category, version: version),
+                          method: :delete,
+                          form: { data: { turbo: false }, class: "d-inline mb-0" },
+                          class: "btn btn-sm btn-outline-danger",
+                          onclick: "return confirm('Delete this version? This cannot be undone.')" do %>
+                        <i class="bi bi-trash"></i> Delete
+                      <% end %>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="alert alert-info mt-4">
+    <i class="bi bi-info-circle me-2"></i>
+    <strong>How it works:</strong>
+    <ul class="mb-0 mt-2">
+      <li><strong>Current</strong> - The version currently being used by the app</li>
+      <li><strong>Original (Hardcoded)</strong> - The data built into the code, always available as baseline</li>
+      <li><strong>Restore</strong> - Creates a new version with the selected data (nothing is deleted)</li>
+    </ul>
+  </div>
+<% else %>
+  <div class="alert alert-secondary">
+    Select a category above to view version history.
+  </div>
+<% end %>

@@ -1,0 +1,15 @@
+<h6><%= @filename %></h6>
+
+<% if @using_cards.any? %>
+  <p class="text-success"><i class="bi bi-check-circle me-2"></i>Used by <%= @using_cards.count %> card(s):</p>
+  <ul class="list-group">
+    <% @using_cards.each do |card| %>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>#<%= card.id %> - <%= truncate(card.title, length: 40) %></span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="text-warning"><i class="bi bi-exclamation-triangle me-2"></i>Not used by any cards.</p>
+  <p class="text-muted small">You can safely delete this image if not needed.</p>
+<% end %>

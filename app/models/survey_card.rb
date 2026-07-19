@@ -1,4 +1,6 @@
 class SurveyCard
+  include YamlLoadable
+
   attr_reader :id, :title, :image_url, :description, :categories, :learn_more, :learn_more_id, :hidden
 
   def initialize(id:, title:, image_url:, description:, categories:, learn_more: nil, learn_more_id: nil, hidden:false)
@@ -16,7 +18,25 @@ class SurveyCard
     @hidden
   end
 
+  # Convert to hash for YAML serialization
+  def to_h
+    {
+      id: id,
+      title: title,
+      image_url: image_url,
+      description: description,
+      categories: categories,
+      learn_more: learn_more,
+      learn_more_id: learn_more_id,
+      hidden: hidden?
+    }
+  end
+
   def self.intro
+    load_with_yaml_override(:intro) { intro_hardcoded }
+  end
+
+  def self.intro_hardcoded
       [
         new(
           id: 1,
@@ -38,6 +58,7 @@ class SurveyCard
           ],
           categories: [:active_no_kidneys, :quiet]
         ),
+        
         new(
           id: 3,
           title: I18n.t("data_1"),
@@ -52,6 +73,19 @@ class SurveyCard
         ),
         new(
           id: 4,
+          title: I18n.t("data_148"),
+          image_url: "no_image.png",
+          description: [
+            I18n.t("data_149"),
+            I18n.t("data_150"),
+            I18n.t("data_151"),
+            I18n.t("data_686"),
+            I18n.t("data_152")
+          ],
+          categories: []
+        ),
+        new(
+          id: 5,
           title: I18n.t("data_6"),
           image_url: "woman_sitting.jpeg" ,
           description: [
@@ -66,7 +100,7 @@ class SurveyCard
           categories: [:active_kidneys]
         ),
         new(
-          id: 5,
+          id: 6,
           title: I18n.t("data_14"),
           image_url: "woman.jpeg" ,
           description: [
@@ -78,7 +112,7 @@ class SurveyCard
           categories: [:active_kidneys]
         ),
         new(
-          id: 6,
+          id: 7,
           title: I18n.t("data_19"),
           image_url: "woman.jpeg" ,
           description: [
@@ -89,7 +123,7 @@ class SurveyCard
           categories: [:active_kidneys]
         ),
         new(
-          id: 7,
+          id: 8,
           title: I18n.t("data_23"),
           image_url: "woman.jpeg" ,
           description: [
@@ -99,7 +133,7 @@ class SurveyCard
           categories: [:active_kidneys]
         ),
         new(
-          id: 8,
+          id: 9,
           title: I18n.t("data_26"),
           image_url: "woman.jpeg" ,
           description: [
@@ -110,7 +144,7 @@ class SurveyCard
           categories: [:active_kidneys]
         ),
         new(
-          id: 9,
+          id: 10,
           title: I18n.t("data_30"),
           image_url: "woman_smile.jpeg" ,
           description: [
@@ -121,7 +155,7 @@ class SurveyCard
           categories: [:active_kidneys, :quiet]
         ),
         new(
-          id: 10,
+          id: 11,
           title: I18n.t("data_34"),
           image_url: "group_photo.jpeg",
           description: [
@@ -136,7 +170,7 @@ class SurveyCard
         ),
 
         new(
-          id: 11,
+          id: 12,
           title: I18n.t("data_47"),
           image_url: "elderly.jpg",
           description: [
@@ -148,7 +182,7 @@ class SurveyCard
         ),
 
         new(
-          id: 12,
+          id: 13,
           title: I18n.t("data_51"),
           image_url: "woman.jpeg",
           description: [
@@ -162,7 +196,7 @@ class SurveyCard
         ),
 
         new(
-          id: 13,
+          id: 14,
           title: I18n.t("data_57"),
           image_url: "woman.jpeg",
           description: [
@@ -176,7 +210,7 @@ class SurveyCard
         ),
 
         new(
-          id: 14,
+          id: 15,
           title: I18n.t("data_63"),
           image_url: "woman.jpeg",
           description: [
@@ -190,7 +224,7 @@ class SurveyCard
         ),
 
         new(
-          id: 15,
+          id: 16,
           title: I18n.t("data_69"),
           image_url: "woman.jpeg",
           description: [
@@ -204,7 +238,7 @@ class SurveyCard
         ),
 
         new(
-          id: 16,
+          id: 17,
           title: I18n.t("data_75"),
           image_url: "woman.jpeg",
           description: [
@@ -218,7 +252,7 @@ class SurveyCard
         ),
 
         new(
-          id: 17,
+          id: 18,
           title: I18n.t("data_81"),
           image_url: "woman.jpeg",
           description: [
@@ -232,7 +266,7 @@ class SurveyCard
         ),
 
         new(
-          id: 18,
+          id: 19,
           title: I18n.t("data_41"),
           image_url: "lupus_banner.png",
           description: [
@@ -250,6 +284,10 @@ class SurveyCard
   end
 
   def self.biologic
+    load_with_yaml_override(:biologic) { biologic_hardcoded }
+  end
+
+  def self.biologic_hardcoded
       [
         new(
           id: 1,
@@ -659,6 +697,10 @@ class SurveyCard
   end
 
   def self.steroids
+    load_with_yaml_override(:steroids) { steroids_hardcoded }
+  end
+
+  def self.steroids_hardcoded
       [
         new(
           id: 1,
@@ -788,6 +830,10 @@ class SurveyCard
   end
 
   def self.treatment
+    load_with_yaml_override(:treatment) { treatment_hardcoded }
+  end
+
+  def self.treatment_hardcoded
     [
       new(
         id: 1,
@@ -871,6 +917,7 @@ class SurveyCard
           I18n.t("data_149"),
           I18n.t("data_150"),
           I18n.t("data_151"),
+          I18n.t("data_686"),
           I18n.t("data_152")
         ],
         categories: [:active_kidneys]
@@ -1564,6 +1611,53 @@ class SurveyCard
 
       new(
         id: 63,
+        title: I18n.t("data_687"),
+        image_url: "woman_short_hair.jpg",
+        description: [
+          
+        ],
+        categories: [:active_kidneys]
+      ),
+      
+      new(
+        id: 64,
+        title: I18n.t("data_688"),
+        image_url: "no_image.png",
+        description: [
+          I18n.t("data_689"),
+          I18n.t("data_690"),
+          I18n.t("data_691"),
+          I18n.t("data_692")
+        ],
+        categories: [:active_kidneys]
+      ),
+
+      new(
+        id: 65,
+        title: I18n.t("data_693"),
+        image_url: "obinutuzumab.png",
+        description: [
+          I18n.t("data_694"),
+          I18n.t("data_695"),
+          I18n.t("data_696")
+        ],
+        categories: [:active_kidneys],
+        learn_more: I18n.t("data_569"),
+        learn_more_id: 107
+      ),
+      
+      new(
+        id: 66,
+        title: I18n.t("data_697"),
+        image_url: "iv.jpg",
+        description: [
+          I18n.t("data_698"),
+          I18n.t("data_699")
+        ],
+        categories: [:active_kidneys]
+      ),
+      new(
+        id: 67,
         title: I18n.t("data_369"),
         image_url: "elderly.jpg",
         description: [
@@ -1580,6 +1674,10 @@ class SurveyCard
   end
 
   def self.sexspissues
+    load_with_yaml_override(:sexspissues) { sexspissues_hardcoded }
+  end
+
+  def self.sexspissues_hardcoded
     [
       new(
         id: 1,
@@ -1766,6 +1864,10 @@ class SurveyCard
   end
 
   def self.learn_cards
+    load_with_yaml_override(:learn_cards) { learn_cards_hardcoded }
+  end
+
+  def self.learn_cards_hardcoded
     [
       new(
           id: 101,

@@ -6,13 +6,25 @@
 
     <title><%= content_for(:title) || "Lupus App" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-   
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#dc3545" />
 
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <%= yield :head %>
+
+    <script>
+      // Register Service Worker for offline support
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(reg => console.log('SW registered:', reg.scope))
+            .catch(err => console.log('SW registration failed:', err));
+        });
+      }
+    </script>
   </head>
   <body>
     <main>
@@ -42,8 +54,16 @@
     <div>
       <img src="<%= asset_path('uab_medicine.jpg') %>" alt="Lupus App Logo" style="height: 50px;" />
     </div>
-    
+
   </div>
+
+  <% unless turbo_native_app? %>
+    <div style="text-align: center; margin-top: 1rem; padding-bottom: 0.5rem;">
+      <a href="<%= admin_cards_path %>" style="color: #9ca3af; font-size: 0.75rem; text-decoration: none;">
+        Admin
+      </a>
+    </div>
+  <% end %>
 </footer>
 
 

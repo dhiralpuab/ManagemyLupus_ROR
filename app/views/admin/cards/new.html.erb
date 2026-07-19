@@ -1,0 +1,154 @@
+<%
+  # Get all cards for the learn_more dropdown
+  all_cards = SurveyCard.intro + SurveyCard.treatment + SurveyCard.steroids +
+              SurveyCard.biologic + SurveyCard.sexspissues + SurveyCard.learn_cards
+
+  # Get all images
+  images_path = Rails.root.join("app", "assets", "images")
+  available_images = Dir.glob(images_path.join("*.{jpg,jpeg,png,gif,PNG,JPG,JPEG}")).map { |f| File.basename(f) }.uniq.sort
+%>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">
+          <i class="bi bi-plus-circle me-2"></i>New Card
+          <span class="badge bg-secondary ms-2"><%= @category.to_s.titleize %></span>
+        </h5>
+      </div>
+      <div class="card-body">
+        <%= form_tag admin_create_card_path(category: @category), method: :post, data: { turbo: false } do %>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Title</label>
+            <%= text_field_tag :title, nil, class: "form-control", required: true, placeholder: "Enter card title..." %>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Image</label>
+            <select name="image_url" class="form-select" id="imageSelect">
+              <option value="">-- Select an image --</option>
+              <% available_images.each do |img| %>
+                <option value="<%= img %>"><%= img %></option>
+              <% end %>
+            </select>
+            <div class="form-text">
+              <a href="<%= admin_images_path %>" target="_blank">Manage images</a>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Description</label>
+            <div class="form-text mb-2">One bullet point per line</div>
+            <%= text_area_tag :description, nil, class: "form-control", rows: 8, placeholder: "Enter each bullet point on a new line..." %>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Categories</label>
+            <div class="form-text mb-2">Select all that apply. Categories determine when this card is shown based on user's survey answers.</div>
+            <%
+              category_options = {
+                active_kidneys: "Active Kidneys – User has active kidney involvement",
+                quiet: "Quiet – User has quiet/stable lupus",
+                female: "Female – User identified as female",
+                male: "Male – User identified as male",
+                a: "A – Hydroxychloroquine only (mild)",
+                b: "B – Immunosuppressants (moderate)",
+                c: "C – Biologics (severe)",
+                d: "D – On steroids currently"
+              }
+            %>
+            <div class="row">
+              <% category_options.each do |cat, description| %>
+                <div class="col-md-6 mb-2">
+                  <div class="form-check">
+                    <input type="checkbox"
+                           name="categories[]"
+                           value="<%= cat %>"
+                           id="cat_<%= cat %>"
+                           class="form-check-input">
+                    <label class="form-check-label" for="cat_<%= cat %>">
+                      <strong><%= cat %></strong>
+                      <br><small class="text-muted"><%= description %></small>
+                    </label>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="card bg-light mb-3">
+            <div class="card-header">
+              <strong><i class="bi bi-link-45deg me-2"></i>Learn More Link (Optional)</strong>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Button Text</label>
+                  <%= text_field_tag :learn_more, nil, class: "form-control", placeholder: "e.g., Learn more about this..." %>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Links to Card</label>
+                  <select name="learn_more_id" class="form-select" id="learnMoreSelect">
+                    <option value="">-- None --</option>
+                    <% all_cards.each do |c| %>
+                      <option value="<%= c.id %>">
+                        #<%= c.id %> - <%= truncate(c.title, length: 50) %>
+                      </option>
+                    <% end %>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="form-check">
+              <%= check_box_tag :hidden, "1", false, class: "form-check-input" %>
+              <label class="form-check-label">Hidden (won't show to users)</label>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <%= submit_tag "Create Card", class: "btn btn-success" %>
+            <%= link_to "Cancel", admin_cards_path, class: "btn btn-outline-secondary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <h6 class="mb-0"><i class="bi bi-info-circle me-2"></i>Section Info</h6>
+      </div>
+      <div class="card-body">
+        <p class="mb-2"><strong>Adding card to:</strong></p>
+        <span class="badge bg-primary fs-6"><%= @category.to_s.titleize %></span>
+
+        <hr>
+
+        <p class="small text-muted mb-0">
+          <i class="bi bi-lightbulb me-1"></i>
+          The card will be added to the end of the <%= @category.to_s.titleize %> section.
+          You can edit it later to adjust the content.
+        </p>
+      </div>
+    </div>
+
+    <div class="alert alert-info mt-3">
+      <i class="bi bi-info-circle me-2"></i>
+      A new unique ID will be automatically assigned to this card.
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('imageSelect').addEventListener('change', function() {
+      // Could add image preview here if needed
+    });
+  });
+</script>

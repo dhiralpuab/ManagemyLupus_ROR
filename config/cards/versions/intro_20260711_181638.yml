@@ -1,0 +1,285 @@
+---
+category: intro
+updated_at: '2026-07-11T18:16:38Z'
+cards:
+- id: 1
+  title: Learning About My Treatment Options for Lupus
+  image_url: group_4.jpg
+  description:
+  - This guide is for people with moderate to severe lupus.
+  - This guide is for people with less severe lupus.
+  categories:
+  - active_kidneys
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 2
+  title: Learning About My Treatment Options for Lupus
+  image_url: group_4.jpg
+  description:
+  - " What you learn in this guide will help you understand what is most important
+    to you while deciding with your doctor how to manage your lupus."
+  - This guide is for people with less severe lupus.
+  categories:
+  - active_no_kidneys
+  - quiet
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 3
+  title: Is this information only for women with lupus?
+  image_url: only_for_pic.jpg
+  description:
+  - Lupus affects more women than men.
+  - This information is as applicable to both, men and women, with lupus.
+  - Some information within this guide is solely for women, but those sections may
+    be skipped.
+  - All medications for lupus are available to both men and women with lupus.
+  categories: []
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 4
+  title: Is this information on immunosuppressives only for people with lupus kidney
+    diseases?
+  image_url: no_image.png
+  description:
+  - Most research on immunosuppressive treatments for lupus focused on kidney disease.
+  - The same treatments are used for treatment of serious lupus disease in other parts
+    of the body, including the heart, lung and brain.
+  - The next few screens present the effects of immunosuppressive treatments for kidneys,
+    but most information also applies to other forms of serious lupus disease.
+  - One can replace the word “kidney” with “brain”, “lung” or “vital organ” for most
+    of the treatment information.
+  - Other treatments are discussed later in this guide.
+  categories: []
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 5
+  title: Why did I get internal organ disease from lupus?
+  image_url: woman_sitting.jpeg
+  description:
+  - No one knows why some people with lupus get internal organ disease and others
+    do not, although, both genes and environmental factors may play a role.
+  - Lupus can cause disease in many organs, including the brain, heart, lung, and
+    kidneys.
+  - While different organs can be affected by lupus, the kidneys are the most commonly
+    involved.
+  - One of the most common problems patients face is how to treat lupus kidney disease.
+  - We now have more than one way to treat kidney disease caused by lupus.
+  - This guide will first describe how lupus affects the kidneys, then help you and
+    your doctor talk about the different treatments.
+  - Learning about these treatments will also help you learn about treatment for lupus
+    involving other organs.
+  categories:
+  - active_kidneys
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 6
+  title: How does lupus affect the kidneys?
+  image_url: woman.jpeg
+  description:
+  - Your immune system fights off germs, like viruses and bacteria.
+  - When you have lupus, your immune system is overactive. Instead of only attacking
+    germs, it also attacks your body's healthy tissues.
+  - If your kidneys are attacked, they can become damaged.
+  - Treatment works to calm your immune system so that it stops attacking your kidneys.
+  categories:
+  - active_kidneys
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 7
+  title: Why is it important to protect my kidneys?
+  image_url: woman.jpeg
+  description:
+  - Kidneys are needed to sustain life.
+  - "Your kidneys: \n   -Are in the back of your abdomen\n   -Keep your body clean
+    by getting rid of waste.\n   -Keep all the chemicals in your body balanced.\n
+    \  -Get rid of extra fluid."
+  - If they don't work well enough, dialysis machines should be used to get rid of
+    waste and extra fluid.
+  categories:
+  - active_kidneys
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 8
+  title: How is lupus kidney disease treated?
+  image_url: woman.jpeg
+  description:
+  - "Lupus kidney (and other organ) disease is treated with a combination of steroids
+    and an immunosuppressive. \n   - Steroids are used for a few months.\n   - Immunosuppressive
+    medication is continued for a total of at least 3-5 years."
+  - Many large studies have shown that these medications work better together than
+    alone.
+  categories:
+  - active_kidneys
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 9
+  title: I am concerned about taking medications for such a long time.
+  image_url: woman.jpeg
+  description:
+  - Many people feel that taking medications for a long time is not good for their
+    health.
+  - If you feel this way, tell your doctor.
+  - You may be more comfortable agreeing to start treatment, then decide whether or
+    not to continue, depending on your progress.
+  categories:
+  - active_kidneys
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 10
+  title: What if the medication interferes with my daily life?
+  image_url: woman_smile.jpeg
+  description:
+  - Many people worry that taking medications will make them feel bad and not allow
+    them to keep up with their normal lives.
+  - The truth is that most people taking these medications will not get any side effects.
+  - 'Treatments commonly used for lupus skin disease are: Hydroxychloroquine (Plaquenil),
+    Creams and ointments, and Quinacrine'
+  categories:
+  - active_kidneys
+  - quiet
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 11
+  title: What other people say about serious lupus disease
+  image_url: group_photo.jpeg
+  description:
+  - Having my family be a part of this is a great help.
+  - Make sure your doctor explains things in a simple way.
+  - I am worried that I will always have to take these drugs.
+  - I still want to have as normal a life as I can, so I think the medications are
+    worth a try.
+  - Think about all of your questions and write them down.
+  - The main thing is that I just want to get better!
+  categories:
+  - active_kidneys
+  - quiet
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 12
+  title: Will these medicines cause harm to my other vital organs?
+  image_url: elderly.jpg
+  description:
+  - Many people have this concern.
+  - When lupus is not well controlled, your immune system is overactive and may harm
+    your vital organs.
+  - Immunosuppressives act by improving the immune system's balance and preventing
+    your own immune system from attacking your vital organs.
+  categories:
+  - active_kidneys
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 13
+  title: Bottom Line
+  image_url: woman.jpeg
+  description:
+  - Without treatment, lupus can be a very serious disease.
+  - Cytoxan and Cellcept protect your kidneys and other organs from lupus.
+  - When taking immunosuppressives, the benefit of saving your kidneys and other organs
+    outweighs the risk.
+  - Most side effects are temporary.
+  - If needed, your doctor can change the dose to reduce the side effects.
+  categories:
+  - a
+  - b
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 14
+  title: What more would you like to talk to your doctor about?
+  image_url: woman.jpeg
+  description:
+  - Side effects of Cytoxan and/or Cellcept?
+  - Benefits of Cytoxan and/or Cellcept?
+  - Cost of these medications?
+  - How to best take these medications?
+  - How long I have to take these medications?
+  categories:
+  - a
+  - b
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 15
+  title: Bottom Line
+  image_url: woman.jpeg
+  description:
+  - Without treatment, lupus can be a very serious disease.
+  - Cytoxan and CIs protect your kidneys and other organs from lupus.
+  - When taking immunosuppressives, the benefit of saving your kidneys and other organs
+    outweighs the risk.
+  - Most side effects are temporary.
+  - If needed, your doctor can change the dose to reduce the side effects.
+  categories:
+  - c
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 16
+  title: Bottom Line
+  image_url: woman.jpeg
+  description:
+  - Without treatment, lupus can be a very serious disease.
+  - Cytoxan and Imuran protect your kidneys and other organs from lupus.
+  - When taking immunosuppressives, the benefit of saving your kidneys and other organs
+    outweighs the risk.
+  - Most side effects are temporary.
+  - If needed, your doctor can change the dose to reduce the side effects.
+  categories:
+  - d
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 17
+  title: What more would you like to talk to your doctor about?
+  image_url: woman.jpeg
+  description:
+  - Side effects of Cytoxan and/or CIs?
+  - Benefits of Cytoxan and/or CIs?
+  - Cost of these medications?
+  - How to best take these medications?
+  - How long I have to take these medications?
+  categories:
+  - c
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 18
+  title: What more would you like to talk to your doctor about?
+  image_url: woman.jpeg
+  description:
+  - Side effects of Cytoxan and/or Imuran?
+  - Benefits of Cytoxan and/or Imuran?
+  - Cost of these medications?
+  - How to best take these medications?
+  - How long I have to take these medications?
+  categories:
+  - d
+  learn_more:
+  learn_more_id:
+  hidden: false
+- id: 19
+  title: What else can I do to help myself?
+  image_url: lupus_banner.png
+  description:
+  - Ask family and friends for help with errands or chores.
+  - Put together a strong support system.
+  - Reach out to others when needed.
+  - Find out if there is a Lupus support group in your area. No one understands serious
+    lupus better than people who have gone through it before.
+  - Read about helpful tips on the Lupus Foundation website.
+  categories: []
+  learn_more:
+  learn_more_id:
+  hidden: false

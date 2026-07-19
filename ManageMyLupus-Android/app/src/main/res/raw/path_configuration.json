@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "screenshots_enabled": true
+  },
+  "rules": [
+    {
+      "patterns": ["^/$"],
+      "properties": {
+        "presentation": "replace",
+        "context": "default"
+      }
+    },
+    {
+      "patterns": ["^/survey/next"],
+      "properties": {
+        "presentation": "push",
+        "context": "default",
+        "pull_to_refresh_enabled": true
+      }
+    },
+    {
+      "patterns": ["^/cards/\\d+$"],
+      "properties": {
+        "presentation": "modal",
+        "context": "modal"
+      }
+    },
+    {
+      "patterns": ["^/survey/save$"],
+      "properties": {
+        "presentation": "none"
+      }
+    }
+  ]
+}

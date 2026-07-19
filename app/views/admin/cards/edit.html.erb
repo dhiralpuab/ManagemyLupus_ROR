@@ -1,0 +1,225 @@
+<%
+  # Get all cards for the learn_more dropdown
+  all_cards = SurveyCard.intro + SurveyCard.treatment + SurveyCard.steroids +
+              SurveyCard.biologic + SurveyCard.sexspissues + SurveyCard.learn_cards
+
+  # Get all images
+  images_path = Rails.root.join("app", "assets", "images")
+  available_images = Dir.glob(images_path.join("*.{jpg,jpeg,png,gif,PNG,JPG,JPEG}")).map { |f| File.basename(f) }.sort
+%>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">
+          <i class="bi bi-pencil me-2"></i>Edit Card #<%= @card.id %>
+          <span class="badge bg-secondary ms-2"><%= @category.to_s.titleize %></span>
+        </h5>
+      </div>
+      <div class="card-body">
+        <%= form_tag admin_update_card_path(id: @card.id, category: @category), method: :patch, data: { turbo: false } do %>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Title</label>
+            <%= text_field_tag :title, @card.title, class: "form-control", required: true %>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Image</label>
+            <select name="image_url" class="form-select" id="imageSelect">
+              <option value="">-- Select an image --</option>
+              <% available_images.each do |img| %>
+                <option value="<%= img %>" <%= 'selected' if @card.image_url == img %>><%= img %></option>
+              <% end %>
+            </select>
+            <div class="form-text">
+              <a href="<%= admin_images_path %>" target="_blank">Manage images</a>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Description</label>
+            <div class="form-text mb-2">One bullet point per line</div>
+            <%= text_area_tag :description,
+                Array(@card.description).join("\n"),
+                class: "form-control",
+                rows: 8 %>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Categories</label>
+            <div class="form-text mb-2">Select all that apply. Categories determine when this card is shown based on user's survey answers.</div>
+            <%
+              category_options = {
+                active_kidneys: "Active Kidneys – User has active kidney involvement",
+                quiet: "Quiet – User has quiet/stable lupus",
+                female: "Female – User identified as female",
+                male: "Male – User identified as male",
+                a: "A – Hydroxychloroquine only (mild)",
+                b: "B – Immunosuppressants (moderate)",
+                c: "C – Biologics (severe)",
+                d: "D – On steroids currently"
+              }
+              current_categories = @card.categories.map(&:to_sym)
+            %>
+            <div class="row">
+              <% category_options.each do |cat, description| %>
+                <div class="col-md-6 mb-2">
+                  <div class="form-check">
+                    <input type="checkbox"
+                           name="categories[]"
+                           value="<%= cat %>"
+                           id="cat_<%= cat %>"
+                           class="form-check-input"
+                           <%= 'checked' if current_categories.include?(cat) %>>
+                    <label class="form-check-label" for="cat_<%= cat %>">
+                      <strong><%= cat %></strong>
+                      <br><small class="text-muted"><%= description %></small>
+                    </label>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="card bg-light mb-3">
+            <div class="card-header">
+              <strong><i class="bi bi-link-45deg me-2"></i>Learn More Link</strong>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Button Text</label>
+                  <%= text_field_tag :learn_more, @card.learn_more, class: "form-control", placeholder: "e.g., Learn more about this..." %>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Links to Card</label>
+                  <select name="learn_more_id" class="form-select" id="learnMoreSelect">
+                    <option value="">-- None --</option>
+                    <% all_cards.each do |c| %>
+                      <option value="<%= c.id %>" <%= 'selected' if @card.learn_more_id == c.id %>>
+                        #<%= c.id %> - <%= truncate(c.title, length: 50) %>
+                      </option>
+                    <% end %>
+                  </select>
+                </div>
+              </div>
+              <% if @card.learn_more_id.present? %>
+                <% linked_card = all_cards.find { |c| c.id == @card.learn_more_id } %>
+                <% if linked_card %>
+                  <div class="alert alert-info mb-0">
+                    <strong>Currently links to:</strong> #<%= linked_card.id %> - <%= linked_card.title %>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="form-check">
+              <%= check_box_tag :hidden, "1", @card.hidden?, class: "form-check-input" %>
+              <label class="form-check-label">Hidden (won't show to users)</label>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <%= submit_tag "Save Changes", class: "btn btn-primary" %>
+            <%= link_to "Cancel", admin_cards_path, class: "btn btn-outline-secondary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Delete button OUTSIDE the edit form to prevent conflicts -->
+    <div class="card mt-3 border-danger">
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <div>
+          <strong class="text-danger">Danger Zone</strong>
+          <p class="mb-0 small text-muted">Delete this card permanently</p>
+        </div>
+        <button type="button" class="btn btn-outline-danger" id="deleteCardBtn">
+          <i class="bi bi-trash me-1"></i>Delete Card
+        </button>
+      </div>
+    </div>
+
+    <!-- Hidden delete form -->
+    <%= form_tag admin_delete_card_path(id: @card.id, category: @category), method: :delete, id: "deleteCardForm", style: "display:none;", data: { turbo: false } do %>
+    <% end %>
+
+    <div class="alert alert-info mt-4">
+      <i class="bi bi-info-circle me-2"></i>
+      <strong>Note:</strong> When you save, a new version will be created. You can always restore previous versions from the History page.
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card mb-3">
+      <div class="card-header">
+        <h6 class="mb-0"><i class="bi bi-eye me-2"></i>Preview</h6>
+      </div>
+      <div class="card-body text-center">
+        <div id="imagePreview">
+          <% if @card.image_url.present? %>
+            <%= image_tag @card.image_url,
+                class: "img-fluid rounded mb-3",
+                style: "max-height: 200px;",
+                onerror: "this.src='https://via.placeholder.com/200x150?text=No+Image'" %>
+          <% end %>
+        </div>
+        <h5><%= @card.title %></h5>
+        <ul class="text-start small">
+          <% Array(@card.description).each do |item| %>
+            <li><%= item %></li>
+          <% end %>
+        </ul>
+        <% if @card.learn_more.present? %>
+          <div class="mt-3">
+            <span class="badge bg-primary"><%= @card.learn_more %> → Card #<%= @card.learn_more_id %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <% if @card.learn_more_id.present? %>
+      <% linked_card = all_cards.find { |c| c.id == @card.learn_more_id } %>
+      <% if linked_card %>
+        <div class="card">
+          <div class="card-header bg-info text-white">
+            <h6 class="mb-0"><i class="bi bi-link me-2"></i>Linked "Learn More" Card</h6>
+          </div>
+          <div class="card-body">
+            <strong>#<%= linked_card.id %></strong> - <%= linked_card.title %>
+            <ul class="small mt-2 mb-0">
+              <% Array(linked_card.description).first(2).each do |item| %>
+                <li><%= truncate(item.to_s, length: 50) %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Image preview on change
+    document.getElementById('imageSelect').addEventListener('change', function() {
+      const preview = document.getElementById('imagePreview');
+      if (this.value) {
+        preview.innerHTML = '<img src="/assets/' + this.value + '" class="img-fluid rounded mb-3" style="max-height: 200px;" onerror="this.src=\'https://via.placeholder.com/200x150?text=No+Image\'">';
+      } else {
+        preview.innerHTML = '<div class="text-muted">No image selected</div>';
+      }
+    });
+
+    // Delete confirmation
+    document.getElementById('deleteCardBtn').addEventListener('click', function() {
+      if (confirm('Are you sure you want to DELETE this card?\n\nThis action will:\n- Remove the card from this section\n- Create a new version without this card\n\nYou can restore from Version History if needed.')) {
+        document.getElementById('deleteCardForm').submit();
+      }
+    });
+  });
+</script>
