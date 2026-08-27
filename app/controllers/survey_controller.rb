@@ -6,19 +6,25 @@ class SurveyController < ApplicationController
     Rails.logger.info "OpenAI API Key present? #{ENV['OPENAI_API_KEY'].present?}"
 
     # Store survey data in session for persistence across navigation
+    # Use string keys for consistent serialization
     session[:survey] = {
-      gender: params[:gender],
-      status: params[:status],
-      kidney_treatment: params[:kidney_treatment],
-      notes: params[:notes]
+      "gender" => params[:gender],
+      "status" => params[:status],
+      "kidney_treatment" => params[:kidney_treatment],
+      "notes" => params[:notes]
     }
 
+    Rails.logger.info "SURVEY SAVE: session[:survey]=#{session[:survey].inspect}"
     redirect_to survey_next_path(category: "basic"), status: :see_other
   end
 
   def next
+    Rails.logger.info "SURVEY NEXT: session[:survey]=#{session[:survey].inspect}"
+
     # Redirect to home if user hasn't completed the survey form
-    unless session[:survey].present? && session[:survey][:status].present?
+    survey = session[:survey]
+    unless survey.present? && survey["status"].present?
+      Rails.logger.info "SURVEY NEXT: Missing survey data, redirecting to root"
       redirect_to root_path and return
     end
 
@@ -26,10 +32,10 @@ class SurveyController < ApplicationController
 
     # Read from session (persistent across navigation)
     @survey_data = {
-      "gender" => session[:survey][:gender],
-      "status" => session[:survey][:status],
-      "kidney_treatment" => session[:survey][:kidney_treatment],
-      "notes" => session[:survey][:notes]
+      "gender" => survey["gender"],
+      "status" => survey["status"],
+      "kidney_treatment" => survey["kidney_treatment"],
+      "notes" => survey["notes"]
     }
 
     Rails.logger.info "SURVEY NEXT: @survey_data=#{@survey_data.inspect}"

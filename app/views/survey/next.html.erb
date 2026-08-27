@@ -16,8 +16,8 @@
 } %>
 <%
   # Read from session (more reliable than URL params for native apps)
-  current_status = session.dig(:survey, :status)
-  notes = session.dig(:survey, :notes)
+  current_status = session[:survey] && session[:survey]["status"]
+  notes = session[:survey] && session[:survey]["notes"]
 %>
 
 <% if turbo_native_android? %>
