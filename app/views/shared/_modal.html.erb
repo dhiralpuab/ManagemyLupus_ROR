@@ -1,5 +1,328 @@
 <!-- modal.html.erb -->
 
+<% if turbo_native_android? %>
+<!-- ========== ANDROID VERSION ========== -->
+<style>
+  #startButton {
+    display: block;
+  }
+  #startButton.hidden {
+    display: none !important;
+  }
+  .intro-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #fff;
+    z-index: 9999;
+    overflow-y: auto;
+    display: none;
+  }
+  .intro-modal.show {
+    display: block;
+  }
+  body.modal-open {
+    overflow: hidden !important;
+  }
+  .intro-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 30px 20px;
+    box-sizing: border-box;
+  }
+  .intro-logo {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .intro-logo img {
+    max-height: 100px;
+    max-width: 100%;
+  }
+  .chip-group {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+    justify-content: center;
+  }
+  .chip {
+    padding: 14px 32px;
+    border-radius: 25px;
+    border: 2px solid #6200EE;
+    background: #fff;
+    color: #6200EE;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .chip.selected {
+    background: #6200EE;
+    color: #fff;
+    transform: scale(1.05);
+  }
+  .intro-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    margin-top: 24px;
+    color: #333;
+  }
+  .material-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 24px 20px;
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 16px;
+    background: #6200EE;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 70px;
+  }
+  .material-btn.selected {
+    background: #3700B3;
+    box-shadow: 0 4px 12px rgba(98, 0, 238, 0.4);
+    transform: scale(1.02);
+  }
+  .step-indicator {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #666;
+    font-size: 16px;
+  }
+  .notes-section {
+    margin-top: 24px;
+  }
+  .notes-section textarea {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-size: 16px;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+  .notes-section small {
+    display: block;
+    margin-top: 12px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    margin-top: 32px;
+    border: none;
+    border-radius: 16px;
+    background: #6200EE;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 60px;
+  }
+  .hidden-step {
+    display: none;
+  }
+  .back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #6200EE;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+  }
+</style>
+
+<!-- Start Button -->
+<a id="startButton" role="button" tabindex="0" aria-label="Start survey">Start &gt;</a>
+
+<!-- Full Screen Modal -->
+<div id="myModal" class="intro-modal" role="dialog" aria-modal="true">
+  <div class="intro-container">
+
+    <!-- Logo -->
+    <div class="intro-logo">
+      <img src="<%= asset_path('uab_logo.png') %>" alt="UAB Logo" onerror="this.style.display='none'" />
+    </div>
+
+    <%= form_with url: survey_save_path, method: :post, local: true, data: { turbo: false }, id: "statusForm" do %>
+
+      <!-- Step 1: Gender & Disease Status -->
+      <div id="step1">
+        <div class="step-indicator">Step 1 of 2</div>
+
+        <!-- Gender Selection -->
+        <div class="intro-title">Select Gender</div>
+        <div class="chip-group">
+          <label class="chip" data-gender="male">
+            <input type="radio" name="gender" value="male" style="display:none" />
+            Male
+          </label>
+          <label class="chip selected" data-gender="female">
+            <input type="radio" name="gender" value="female" style="display:none" checked />
+            Female
+          </label>
+        </div>
+
+        <!-- Disease Status -->
+        <div class="intro-title">What is your disease status?</div>
+
+        <label class="material-btn" data-status="quiet">
+          <input type="radio" name="status" value="quiet" style="display:none" required />
+          Quiet, in remission
+        </label>
+
+        <label class="material-btn" data-status="active_kidneys">
+          <input type="radio" name="status" value="active_kidneys" style="display:none" />
+          Active, including in my kidneys
+        </label>
+
+        <label class="material-btn" data-status="active_no_kidneys">
+          <input type="radio" name="status" value="active_no_kidneys" style="display:none" />
+          Active, but not in my kidneys
+        </label>
+      </div>
+
+      <!-- Step 2: Kidney Treatment (shown only if active_kidneys) -->
+      <div id="step2" class="hidden-step">
+        <div class="step-indicator">Step 2 of 2</div>
+        <a href="#" class="back-link" id="backToStep1">&larr; Back</a>
+
+        <div class="intro-title">Select your kidney treatment option:</div>
+
+        <label class="material-btn" data-kidney="a">
+          <input type="radio" name="kidney_treatment" value="a" style="display:none" />
+          Starting Rx: Cytoxan vs. Cellcept
+        </label>
+
+        <label class="material-btn" data-kidney="b">
+          <input type="radio" name="kidney_treatment" value="b" style="display:none" />
+          Maintain or discuss Rx: Cytoxan vs. Cellcept
+        </label>
+
+        <label class="material-btn" data-kidney="c">
+          <input type="radio" name="kidney_treatment" value="c" style="display:none" />
+          Maintain or discuss Rx: Tacrolimus/Cyclosporine vs. Cytoxan
+        </label>
+
+        <label class="material-btn" data-kidney="d">
+          <input type="radio" name="kidney_treatment" value="d" style="display:none" />
+          Maintain or discuss Rx: Azathioprine vs. Cytoxan
+        </label>
+      </div>
+
+      <!-- Notes Section (shown in final step) -->
+      <div id="notesSection" class="notes-section hidden-step">
+        <div class="intro-title">Additional Notes (Optional)</div>
+        <textarea name="notes" rows="4" placeholder="State your concerns to create personalized recommendations..."></textarea>
+        <small>Your notes help personalize recommendations. A "For You" tab will appear with custom content.</small>
+
+        <button type="submit" class="submit-btn">Continue</button>
+      </div>
+
+    <% end %>
+  </div>
+</div>
+
+<script>
+document.addEventListener("turbo:load", () => {
+  const startButton = document.getElementById("startButton");
+  const modal = document.getElementById("myModal");
+  const step1 = document.getElementById("step1");
+  const step2 = document.getElementById("step2");
+  const notesSection = document.getElementById("notesSection");
+  const backToStep1 = document.getElementById("backToStep1");
+
+  if (!modal) return;
+
+  // Open modal
+  if (startButton) {
+    startButton.addEventListener("click", () => {
+      startButton.classList.add('hidden');
+      modal.classList.add('show');
+      document.body.classList.add('modal-open');
+    });
+  }
+
+  // Gender chip selection
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      chip.querySelector('input').checked = true;
+    });
+  });
+
+  // Status button selection
+  document.querySelectorAll('.material-btn[data-status]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.material-btn[data-status]').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      btn.querySelector('input').checked = true;
+
+      const status = btn.dataset.status;
+
+      setTimeout(() => {
+        if (status === 'active_kidneys') {
+          step1.classList.add('hidden-step');
+          step2.classList.remove('hidden-step');
+          notesSection.classList.add('hidden-step');
+          document.querySelectorAll('input[name="kidney_treatment"]').forEach(i => i.required = true);
+        } else {
+          step1.classList.add('hidden-step');
+          step2.classList.add('hidden-step');
+          notesSection.classList.remove('hidden-step');
+          document.querySelectorAll('input[name="kidney_treatment"]').forEach(i => {
+            i.required = false;
+            i.checked = false;
+          });
+        }
+      }, 200);
+    });
+  });
+
+  // Kidney treatment selection
+  document.querySelectorAll('.material-btn[data-kidney]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.material-btn[data-kidney]').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      btn.querySelector('input').checked = true;
+
+      setTimeout(() => {
+        step2.classList.add('hidden-step');
+        notesSection.classList.remove('hidden-step');
+      }, 200);
+    });
+  });
+
+  // Back button
+  if (backToStep1) {
+    backToStep1.addEventListener('click', (e) => {
+      e.preventDefault();
+      step2.classList.add('hidden-step');
+      step1.classList.remove('hidden-step');
+      document.querySelectorAll('.material-btn[data-status]').forEach(b => b.classList.remove('selected'));
+      document.querySelectorAll('input[name="status"]').forEach(i => i.checked = false);
+    });
+  }
+});
+</script>
+
+<% else %>
+<!-- ========== WEB/iOS VERSION (Original) ========== -->
 
 <!-- Start Button -->
 <a id="startButton" role="button" tabindex="0" aria-label="Start survey">Start &gt;</a>
@@ -7,10 +330,10 @@
 <!-- Modal -->
 <div id="myModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
   <div class="modal-content-custom">
-    <button class="close" aria-label="Close modal">×</button>
+    <button class="close" aria-label="Close modal">&times;</button>
     <h2 id="modalTitle">Please answer a few questions</h2>
 
-    <%= form_with url: survey_save_path, method: :post, local: true, id: "statusForm" do %>
+    <%= form_with url: survey_save_path, method: :post, local: true, data: { turbo: false }, id: "statusForm" do %>
       <fieldset style="margin-bottom: 1.5rem;">
         <legend><strong>Gender</strong></legend>
         <label><input type="radio" name="gender" required value="male" /> Male</label><br/>
@@ -43,14 +366,12 @@
       </fieldset>
 
       <div style="margin-top: 1.5rem;">
-    <button type="submit" class="btn btn-primary">Next</button>
-  </div>
-<% end %> <!-- End of form_with -->
+        <button type="submit" class="btn btn-primary">Next</button>
+      </div>
+    <% end %>
 
   </div>
 </div>
-
-
 
 <script>
   function openStartModal() {
@@ -104,8 +425,8 @@
       radio.addEventListener("change", toggleKidneyOptions);
     });
 
-    // Initial state check on load
     toggleKidneyOptions();
   });
 </script>
 
+<% end %>

@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "uab.lupasdecisionaid2.app-mergeDebugResources-50:/layout/fragment_web.xml",
+        "source": "uab.lupasdecisionaid2.app-main-53:/layout/fragment_web.xml"
+    },
+    {
+        "merged": "uab.lupasdecisionaid2.app-mergeDebugResources-50:/layout/activity_main.xml",
+        "source": "uab.lupasdecisionaid2.app-main-53:/layout/activity_main.xml"
+    },
+    {
+        "merged": "uab.lupasdecisionaid2.app-mergeDebugResources-50:/layout/fragment_web_bottom_sheet.xml",
+        "source": "uab.lupasdecisionaid2.app-main-53:/layout/fragment_web_bottom_sheet.xml"
+    }
+]

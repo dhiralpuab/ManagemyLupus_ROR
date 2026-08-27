@@ -1,0 +1,60 @@
+{
+  "settings": {
+    "screenshots_enabled": true
+  },
+  "rules": [
+    {
+      "patterns": [
+        ".*"
+      ],
+      "properties": {
+        "uri": "turbo://fragment/web",
+        "presentation": "push"
+      }
+    },
+    {
+      "patterns": [
+        "^/$"
+      ],
+      "properties": {
+        "uri": "turbo://fragment/web",
+        "presentation": "replace"
+      }
+    },
+    {
+      "patterns": [
+        "^/survey/next"
+      ],
+      "properties": {
+        "uri": "turbo://fragment/web",
+        "presentation": "push"
+      }
+    },
+    {
+      "patterns": [
+        "^/offline$"
+      ],
+      "properties": {
+        "uri": "turbo://fragment/web",
+        "presentation": "replace"
+      }
+    },
+    {
+      "patterns": [
+        "^/cards/\\d+$"
+      ],
+      "properties": {
+        "uri": "turbo://fragment/web/modal/sheet",
+        "presentation": "modal"
+      }
+    },
+    {
+      "patterns": [
+        "^/survey/save$"
+      ],
+      "properties": {
+        "presentation": "none"
+      }
+    }
+  ]
+}

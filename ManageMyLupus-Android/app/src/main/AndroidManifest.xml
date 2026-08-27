@@ -16,32 +16,20 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTask">
-
+            android:theme="@style/Theme.ManageMyLupus">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Custom URL Scheme for deep linking -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="managemylupus" />
-            </intent-filter>
-
-            <!-- App Links (Universal Links equivalent) -->
-            <!-- TODO: Update host to your production domain -->
+            <!-- Deep linking -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="your-rails-app.com"
-                    android:pathPattern="/.*" />
+                <data android:scheme="https" android:host="managemylupus.com" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

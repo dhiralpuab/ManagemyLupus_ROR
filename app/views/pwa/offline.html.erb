@@ -10,7 +10,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #6200EE 0%, #3700B3 100%);
+      padding: 1rem;
     }
     .offline-card {
       background: white;
@@ -18,7 +19,7 @@
       padding: 2rem;
       text-align: center;
       max-width: 400px;
-      margin: 1rem;
+      width: 100%;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     }
     .offline-icon {
@@ -27,6 +28,33 @@
     }
     .retry-btn {
       margin-top: 1.5rem;
+      background: #6200EE;
+      border-color: #6200EE;
+    }
+    .retry-btn:hover {
+      background: #3700B3;
+      border-color: #3700B3;
+    }
+    .cached-links {
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+    .cached-links h6 {
+      margin-bottom: 0.75rem;
+      color: #333;
+    }
+    .cached-links a {
+      display: block;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      background: #f8f9fa;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      color: #6200EE;
+      font-weight: 500;
+    }
+    .cached-links a:hover {
+      background: #e9ecef;
     }
   </style>
 </head>
@@ -35,14 +63,23 @@
     <div class="offline-icon">📡</div>
     <h2>You're Offline</h2>
     <p class="text-muted">
-      It looks like you've lost your internet connection.
-      Don't worry - previously viewed pages are still available!
+      No internet connection. Previously viewed pages may still be available below.
     </p>
+
+    <div class="cached-links">
+      <h6>Try these cached pages:</h6>
+      <a href="/survey/next?category=basic">Intro</a>
+      <a href="/survey/next?category=treatment">Treatment</a>
+      <a href="/survey/next?category=steroids">Steroids</a>
+      <a href="/survey/next?category=biologic">Biologic</a>
+      <a href="/survey/next?category=sexspissues">Special Issues</a>
+    </div>
+
     <button class="btn btn-primary retry-btn" onclick="window.location.reload()">
       Try Again
     </button>
     <div class="mt-3">
-      <a href="/" class="text-decoration-none">← Go to Home</a>
+      <a href="/" class="text-decoration-none" style="color: #6200EE;">← Go to Home</a>
     </div>
   </div>
 
@@ -51,6 +88,17 @@
     window.addEventListener('online', () => {
       window.location.reload();
     });
+
+    // Check connectivity and auto-redirect if back online
+    setInterval(() => {
+      fetch('/', { method: 'HEAD', cache: 'no-store' })
+        .then(() => {
+          window.location.href = '/';
+        })
+        .catch(() => {
+          // Still offline
+        });
+    }, 5000);
   </script>
 </body>
 </html>

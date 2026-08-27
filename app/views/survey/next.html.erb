@@ -1,39 +1,136 @@
-<!-- In your layout or page header -->
-<nav class="bg-white border-bottom shadow-sm sticky-top">
-  <div class="container d-flex flex-wrap justify-content-between align-items-center py-2">
-    <!-- App title or logo -->
-    <%= link_to root_path, class: "text-decoration-none text-dark" do %>
-      <div class="fw-bold fs-5">Lupus App</div>
+<% tabs = {
+  "basic" => "Intro",
+  "steroids" => "Steroids",
+  "treatment" => "Treatment",
+  "biologic" => "Biologic",
+  "sexspissues" => "Other",
+  "foryou" => "For You"
+} %>
+<% tab_icons = {
+  "basic" => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/></svg>',
+  "steroids" => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/><path d="M4.5 0A2.5 2.5 0 0 0 2 2.5v11A2.5 2.5 0 0 0 4.5 16h7a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v11a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5v-11z"/></svg>',
+  "treatment" => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M8 4.5a.5.5 0 0 1 .5.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 .5-.5z"/><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm0-1A7 7 0 1 1 8 1a7 7 0 0 1 0 14z"/></svg>',
+  "biologic" => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v.5h2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H4a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 4 1h2V.5zM3 3.5h10v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-11z"/></svg>',
+  "sexspissues" => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/></svg>',
+  "foryou" => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>'
+} %>
+<%
+  # Read from session (more reliable than URL params for native apps)
+  current_status = session.dig(:survey, :status)
+  notes = session.dig(:survey, :notes)
+%>
+
+<% if turbo_native_android? %>
+  <style>
+    .android-header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 100;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+    }
+    .android-header a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    .android-header svg {
+      margin-right: 10px;
+    }
+    .android-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid #ddd;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-around;
+      padding: 6px 0;
+      padding-bottom: max(6px, env(safe-area-inset-bottom));
+    }
+    .android-bottom-nav a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #757575;
+      font-size: 10px;
+      padding: 4px 2px;
+    }
+    .android-bottom-nav a svg {
+      margin-bottom: 2px;
+    }
+    .android-bottom-nav a.active {
+      color: #6200EE;
+    }
+    .android-bottom-nav a.active svg {
+      fill: #6200EE;
+    }
+    body {
+      padding-bottom: 65px !important;
+    }
+  </style>
+
+  <!-- Android: Header on top with home button -->
+  <div class="android-header">
+    <%= link_to root_path do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+      </svg>
+      Lupus App
     <% end %>
-
-    <ul class="nav nav-tabs mb-4">
-      <% tabs = {
-        "basic" => "Intro",
-        "steroids" => "Steroids",
-        "treatment" => "Treatment",
-        "biologic" => "Biologic/Med",
-        "sexspissues" => "Sex Sp Issues",
-        "foryou" => "For you"
-      } %>
-      <% current_status = session[:survey]&.[]("status") %>
-      <% notes = session[:survey]&.[]("notes") %>
-      <% tabs.each do |key, label| %>
-        <% next if key == "treatment" && current_status == "quiet" %>  
-        <% next if key == "sexspissues" && current_status == "quiet" %> 
-        <% next if key == "treatment" && current_status == "active_no_kidneys" %> 
-        <% next if key == "foryou" && notes == "" %>
-        <li class="nav-item">
-          <%= link_to label, survey_next_path(category: key), class: [
-        "nav-link",
-        ("active" if params[:category] == key || (params[:category].blank? && key == "basic")),
-        ("foryou-glow" if key == "foryou")
-      ].compact.join(" ") %>
-        </li>
-      <% end %>
-    </ul>
-
   </div>
-</nav>
+
+  <!-- Android: Bottom Navigation Bar -->
+  <nav class="android-bottom-nav">
+    <% tabs.each do |key, label| %>
+      <% next if key == "treatment" && current_status == "quiet" %>
+      <% next if key == "sexspissues" && current_status == "quiet" %>
+      <% next if key == "treatment" && current_status == "active_no_kidneys" %>
+      <% next if key == "foryou" && notes.to_s.strip.empty? %>
+      <% is_active = params[:category] == key || (params[:category].blank? && key == "basic") %>
+      <%= link_to survey_next_path(category: key), class: ("active" if is_active) do %>
+        <%= raw tab_icons[key] %>
+        <%= label %>
+      <% end %>
+    <% end %>
+  </nav>
+<% else %>
+  <!-- Web/iOS: Original layout with tabs on top -->
+  <nav class="bg-white border-bottom shadow-sm sticky-top">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center py-2">
+      <%= link_to root_path, class: "text-decoration-none text-dark" do %>
+        <div class="fw-bold fs-5">Lupus App</div>
+      <% end %>
+
+      <ul class="nav nav-tabs mb-4">
+        <% tabs.each do |key, label| %>
+          <% next if key == "treatment" && current_status == "quiet" %>
+          <% next if key == "sexspissues" && current_status == "quiet" %>
+          <% next if key == "treatment" && current_status == "active_no_kidneys" %>
+          <% next if key == "foryou" && notes.to_s.strip.empty? %>
+          <li class="nav-item">
+            <%= link_to label, survey_next_path(category: key), class: [
+              "nav-link",
+              ("active" if params[:category] == key || (params[:category].blank? && key == "basic")),
+              ("foryou-glow" if key == "foryou")
+            ].compact.join(" ") %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </nav>
+<% end %>
 
 
 <!-- Cards list (same as before) -->
@@ -74,10 +171,10 @@
 
         <div id="modalDescription" style="max-width: 600px; text-align: left; margin: 0 auto;"></div>
       </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-light" id="prevBtn" aria-label="Previous">&lsaquo; Prev</button>
-        <button type="button" class="btn btn-primary" id="learnBtn" aria-label="Learn more">Click here to learn more</button>
-        <button type="button" class="btn btn-light" id="nextBtn" aria-label="Next">Next &rsaquo;</button>
+      <div class="modal-footer" style="display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: stretch; gap: 6px;">
+        <button type="button" class="btn btn-light btn-sm" id="prevBtn" aria-label="Previous" style="flex-shrink: 0; align-self: center;">&lsaquo; Prev</button>
+        <button type="button" class="btn btn-primary btn-sm" id="learnBtn" aria-label="Learn more" style="flex: 1; min-width: 0; white-space: normal; word-wrap: break-word; text-align: center;">Click here to learn more</button>
+        <button type="button" class="btn btn-light btn-sm" id="nextBtn" aria-label="Next" style="flex-shrink: 0; align-self: center;">Next &rsaquo;</button>
       </div>
     </div>
   </div>

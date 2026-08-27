@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const CACHE_NAME = `lupus-app-${CACHE_VERSION}`;
 
 // Pages and assets to cache immediately on install
@@ -10,7 +10,10 @@ const PRECACHE_URLS = [
   "/survey/next?category=biologic",
   "/survey/next?category=sexspissues",
   "/offline",
-  "/manifest.json"
+  "/manifest.json",
+  // Cache CDN assets for offline use
+  "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css",
+  "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 ];
 
 // Install: Cache essential pages

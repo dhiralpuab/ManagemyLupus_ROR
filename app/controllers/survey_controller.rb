@@ -2,29 +2,49 @@ class SurveyController < ApplicationController
   include SurveyHelper
   
   def save
+    Rails.logger.info "SURVEY SAVE: params=#{params.inspect}"
+    Rails.logger.info "OpenAI API Key present? #{ENV['OPENAI_API_KEY'].present?}"
+
+    # Store survey data in session for persistence across navigation
     session[:survey] = {
       gender: params[:gender],
       status: params[:status],
       kidney_treatment: params[:kidney_treatment],
       notes: params[:notes]
     }
-    Rails.logger.info "OpenAI API Key present? #{ENV['OPENAI_API_KEY'].present?}"
-    redirect_to survey_next_path(category: "basic")
+
+    redirect_to survey_next_path(category: "basic"), status: :see_other
   end
 
   def next
+    # Redirect to home if user hasn't completed the survey form
+    unless session[:survey].present? && session[:survey][:status].present?
+      redirect_to root_path and return
+    end
+
     @learn_more_cards = SurveyCard.learn_cards
-    @survey_data = session[:survey]
+
+    # Read from session (persistent across navigation)
+    @survey_data = {
+      "gender" => session[:survey][:gender],
+      "status" => session[:survey][:status],
+      "kidney_treatment" => session[:survey][:kidney_treatment],
+      "notes" => session[:survey][:notes]
+    }
+
+    Rails.logger.info "SURVEY NEXT: @survey_data=#{@survey_data.inspect}"
 
     # User's selected tags
     user_gender = @survey_data["gender"]&.to_sym
     user_status = @survey_data["status"]&.to_sym
     user_kidney = @survey_data["kidney_treatment"]&.to_sym
-    user_concerns = @survey_data["notes"]&.to_sym
+    user_concerns = @survey_data["notes"]
+
+    Rails.logger.info "SURVEY NEXT: user_status=#{user_status.inspect}"
     tab_category = (params[:category] || "basic").to_sym
 
-    if @survey_data["notes"].present?
-      notes_text = @survey_data["notes"]
+    notes_text = @survey_data["notes"]
+    if notes_text.present?
       user_embedding = SurveyHelper.get_embedding(notes_text)
 
       Rails.logger.info "User notes: #{notes_text}"
